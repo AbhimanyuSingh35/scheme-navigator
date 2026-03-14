@@ -163,6 +163,7 @@
     .modal-body{padding:20px 24px}
     .modal-footer{padding:16px 24px;border-top:1px solid #F0F0F6;display:flex;gap:10px;justify-content:flex-end}
 
+<<<<<<< Updated upstream
     /* Apply steps */
     .apply-step{display:flex;gap:16px;margin-bottom:24px}
     .apply-step-num{width:32px;height:32px;border-radius:50%;background:var(--navy);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
@@ -170,6 +171,83 @@
     .apply-step-num.active{background:var(--saffron);animation:pulse 1.5s infinite}
     .apply-step-content h4{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
     .apply-step-content p{font-size:13px;color:var(--ink-soft);line-height:1.6}
+=======
+    /* ── VOICE BUTTON ── */
+    .voice-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 18px;
+      background: var(--saffron);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .voice-btn:hover:not(:disabled) {
+      background: #e6851f;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(255,153,51,0.4);
+    }
+    .voice-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .voice-btn.playing {
+      background: var(--green);
+      animation: voicePulse 1.5s ease-in-out infinite;
+    }
+    @keyframes voicePulse { 0%,100%{box-shadow:0 0 0 0 rgba(19,136,8,0.4)} 50%{box-shadow:0 0 0 8px rgba(19,136,8,0)} }
+
+    .voice-player-wrap {
+      display: none;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #FFF8F0, #FFF3E0);
+      border: 1px solid var(--saffron-lt);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      align-items: center;
+      gap: 12px;
+    }
+    .voice-player-wrap.visible { display: flex; animation: fadeIn 0.3s ease; }
+    .voice-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--saffron);
+      white-space: nowrap;
+    }
+    .voice-player-wrap audio {
+      flex: 1;
+      height: 36px;
+    }
+
+    /* Profile card */
+    .profile-card {
+      background: linear-gradient(135deg, var(--navy-lt) 0%, #E8F5E9 100%);
+      border-radius: var(--radius-sm);
+      padding: 18px 22px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(0,0,128,0.1);
+    }
+    .profile-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .profile-tag {
+      background: white;
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+>>>>>>> Stashed changes
 
     /* Login box */
     .login-box{background:var(--saffron-lt);border:2px solid var(--saffron);border-radius:var(--radius-sm);padding:18px;margin:16px 0}
@@ -198,21 +276,241 @@
     .success-box h3{font-size:18px;color:var(--green);margin-bottom:6px}
     .success-box p{font-size:13px;color:#1B5E20}
 
+<<<<<<< Updated upstream
     /* Safety */
     .safety-card{background:#F3F4FF;border-radius:var(--radius-sm);padding:16px 20px;margin-top:24px;border:1px solid #C5CAE9}
     .safety-card h3{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px}
     .safety-tips-grid{display:flex;flex-wrap:wrap;gap:6px}
     .safety-tip-item{background:white;border:1px solid #C5CAE9;border-radius:8px;padding:6px 12px;font-size:12px;color:var(--ink-soft)}
+=======
+    .scheme-card-body { padding: 20px 24px; }
+    .impact-text {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      background: var(--navy-lt);
+      border-radius: 8px;
+      border-left: 3px solid var(--navy);
+    }
+
+    .section-heading {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+      margin-top: 16px;
+    }
+    .docs-list, .steps-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .docs-list li {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 14px;
+      color: var(--ink-soft);
+    }
+    .docs-list li::before {
+      content: '☐';
+      font-size: 16px;
+      color: var(--navy);
+      flex-shrink: 0;
+    }
+    .steps-list { counter-reset: steps; }
+    .steps-list li {
+      display: flex;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--ink-soft);
+      counter-increment: steps;
+    }
+    .steps-list li::before {
+      content: counter(steps);
+      background: var(--saffron);
+      color: white;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .quick-tip {
+      background: linear-gradient(135deg, #E8F5E9, #F1F8E9);
+      border: 1px solid var(--green-lt);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--green);
+      font-weight: 500;
+      margin-top: 16px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .scheme-card-footer {
+      padding: 14px 24px;
+      background: #FAFBFF;
+      border-top: 1px solid #F0F0F6;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .apply-btn {
+      background: var(--navy);
+      color: white;
+      text-decoration: none;
+      padding: 9px 22px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.18s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .apply-btn:hover { background: #1a237e; transform: translateY(-1px); }
+    .official-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .official-link:hover { color: var(--navy); }
+    .difficulty {
+      margin-left: auto;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--muted);
+    }
+    .diff-easy   { color: var(--green); }
+    .diff-medium { color: var(--gold); }
+    .diff-hard   { color: var(--red); }
+    .time-badge  {
+      font-size: 12px;
+      color: var(--muted);
+      background: #F0F0F6;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    /* Fraud warning */
+    .fraud-warning {
+      background: var(--red-lt);
+      border: 2px solid #EF9A9A;
+      border-radius: var(--radius-sm);
+      padding: 18px 22px;
+      margin-top: 28px;
+      display: flex;
+      gap: 14px;
+    }
+    .fraud-icon { font-size: 28px; flex-shrink: 0; }
+    .fraud-content h3 { font-size: 16px; font-weight: 700; color: var(--red); margin-bottom: 8px; }
+    .fraud-content p { font-size: 14px; color: #B71C1C; line-height: 1.6; }
+    .safety-tips { margin-top: 10px; }
+    .safety-tips li { font-size: 13px; color: #C62828; margin-bottom: 4px; padding-left: 16px; position: relative; }
+    .safety-tips li::before { content: '⚠️'; position: absolute; left: 0; font-size: 11px; }
+
+    /* Safety card */
+    .safety-card {
+      background: #F3F4FF;
+      border-radius: var(--radius-sm);
+      padding: 18px 22px;
+      margin-top: 28px;
+      border: 1px solid #C5CAE9;
+    }
+    .safety-card h3 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+    .safety-tips-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .safety-tip-item {
+      background: white;
+      border: 1px solid #C5CAE9;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .empty-icon { font-size: 64px; margin-bottom: 16px; }
+    .empty-title { font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+    .empty-text { font-size: 15px; color: var(--muted); line-height: 1.6; }
+>>>>>>> Stashed changes
 
     /* Error */
     .error-card{background:var(--red-lt);border:1px solid #FFCDD2;border-radius:var(--radius-sm);padding:18px}
     .error-card h3{color:var(--red);margin-bottom:6px}
     .error-card p{font-size:13px;color:#B71C1C}
 
+<<<<<<< Updated upstream
     @media(max-width:600px){
       .scheme-card-header,.scheme-card-body,.scheme-card-footer{padding:14px}
       .amount-value{display:none}
       .modal{border-radius:var(--radius) var(--radius) 0 0;margin-top:auto}
+=======
+    /* Language toggle */
+    .lang-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      border: 2px solid var(--navy);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--navy);
+      transition: all 0.2s;
+      z-index: 100;
+    }
+    .lang-toggle:hover { background: var(--navy); color: white; }
+
+    /* Collapsible */
+    details { }
+    summary {
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy);
+      padding: 8px 0;
+      user-select: none;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    summary::before { content: '▶'; font-size: 9px; transition: transform 0.2s; }
+    details[open] summary::before { transform: rotate(90deg); }
+
+    @media (max-width: 600px) {
+      .header-inner { padding: 28px 16px 32px; }
+      .input-card, .scheme-card-body { padding: 20px 16px; }
+      .scheme-card-header { padding: 16px; }
+      .scheme-card-footer { padding: 12px 16px; }
+      .benefit-amount { display: none; }
+      .voice-btn span.voice-label-text { display: none; }
+>>>>>>> Stashed changes
     }
   </style>
 </head>
@@ -303,6 +601,7 @@
 </div>
 
 <script>
+<<<<<<< Updated upstream
 const API = '';
 const EXAMPLES = {
   farmer:'I am a 40-year-old farmer from Himachal Pradesh. I own 2 acres of land and earn ₹1.5 lakh per year. I have a BPL card.',
@@ -311,6 +610,15 @@ const EXAMPLES = {
   elderly:'I am a 67-year-old retired person from UP. Income ₹2,000/month. Need pension and free health treatment.',
   rural:'Rural family in Rajasthan. 5 members. Income ₹80,000/year. BPL card. Kaccha house. Need housing and health support.',
 };
+=======
+  // ── Config ─────────────────────────────────────────────────────────────────
+  const API_BASE = '';
+  let isHindi = false;
+  let recognition = null;
+  let isRecording = false;
+  let lastGuideResult = null;
+  let currentAudioUrl = null;
+>>>>>>> Stashed changes
 
 let currentMode = 'chat';
 let conversationId = null;
@@ -355,6 +663,7 @@ function appendUserBubble(text) {
   win.scrollTop = win.scrollHeight;
 }
 
+<<<<<<< Updated upstream
 function showTyping() {
   const win = document.getElementById('chatWindow');
   const div = document.createElement('div');
@@ -384,6 +693,23 @@ async function sendChatMessage() {
   try {
     const res = await fetch(`${API}/api/conversation/${conversationId}/message`, {
       method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg})
+=======
+    // Reset UI
+    document.getElementById('progressSection').classList.add('visible');
+    document.getElementById('resultsSection').classList.remove('visible');
+    document.getElementById('resultsSection').innerHTML = '';
+    lastGuideResult = null;
+
+    // Clean up previous audio
+    if (currentAudioUrl) {
+      URL.revokeObjectURL(currentAudioUrl);
+      currentAudioUrl = null;
+    }
+
+    Object.keys(STEP_MAP).forEach(k => {
+      const { key } = STEP_MAP[k];
+      updateStep(k, 'idle', 'Waiting...');
+>>>>>>> Stashed changes
     });
     const data = await res.json();
     hideTyping();
@@ -402,10 +728,19 @@ async function sendChatMessage() {
   }
 }
 
+<<<<<<< Updated upstream
 function sendQuick(text) {
   document.getElementById('chatInput').value = text;
   sendChatMessage();
 }
+=======
+    try {
+      const response = await fetch(`${API_BASE}/api/find-schemes-stream`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userInput: input }),
+      });
+>>>>>>> Stashed changes
 
 // ── QUICK SEARCH MODE ──────────────────────────────────────────────────────────
 function setExample(key) { document.getElementById('userInput').value = EXAMPLES[key]; }
@@ -428,6 +763,7 @@ function updateStep(name, status, msg) {
   if(msg) msgEl.textContent = msg;
 }
 
+<<<<<<< Updated upstream
 async function findSchemes() {
   const input = document.getElementById('userInput').value.trim();
   if(!input||input.length<10){alert('Please describe yourself more!');return;}
@@ -468,6 +804,48 @@ async function findSchemes() {
           }catch{}
         }
       }
+=======
+        for (const line of lines) {
+          if (line.startsWith('event: ')) continue;
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.slice(6));
+              if (data.step) {
+                updateStep(data.step, data.status, data.message);
+              } else if (data.profile) {
+                finalResult = data;
+              }
+            } catch {}
+          }
+        }
+      }
+
+      if (finalResult) {
+        renderResults(finalResult);
+      } else {
+        throw new Error('No result received from server');
+      }
+
+    } catch (err) {
+      console.error(err);
+      try {
+        const r2 = await fetch(`${API_BASE}/api/find-schemes`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userInput: input }),
+        });
+        const data = await r2.json();
+        if (data.error) throw new Error(data.error);
+        Object.keys(STEP_MAP).forEach(k => updateStep(k, 'done', 'Complete'));
+        renderResults(data);
+      } catch (err2) {
+        renderError(err2.message || 'Unknown error');
+      }
+    } finally {
+      btn.disabled = false;
+      document.getElementById('btnIcon').textContent = '🔍';
+      document.getElementById('btnText').textContent = 'Find My Schemes';
+>>>>>>> Stashed changes
     }
     if(finalResult) renderResults(finalResult,'quickResults');
     else throw new Error('No result received');
@@ -497,6 +875,7 @@ function renderResults(data, targetId) {
     return;
   }
 
+<<<<<<< Updated upstream
   const tags=[
     profile.occupation&&`💼 ${cap(profile.occupation)}`,
     profile.state!=='unknown'&&`📍 ${cap(profile.state)}`,
@@ -506,6 +885,68 @@ function renderResults(data, targetId) {
     profile.hasBplCard&&`📄 BPL`,
     profile.hasLand&&`🌾 Land Owner`,
   ].filter(Boolean);
+=======
+  // ── Voice (Sarvam AI Hindi TTS) ────────────────────────────────────────────
+  function enableVoiceBtn(guideResult) {
+    lastGuideResult = guideResult;
+  }
+
+  async function handleVoicePlay() {
+    if (!lastGuideResult) return;
+
+    const btn = document.getElementById('voice-btn');
+    const playerWrap = document.getElementById('voice-player-wrap');
+    const audio = document.getElementById('scheme-audio');
+
+    // If already playing, just show the player
+    if (currentAudioUrl) {
+      audio.src = currentAudioUrl;
+      playerWrap.classList.add('visible');
+      audio.play();
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '⏳ <span class="voice-label-text">तैयार हो रहा है...</span>';
+
+    try {
+      const res = await fetch('/api/voice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guide: lastGuideResult }),
+      });
+
+      if (!res.ok) throw new Error('Voice generation failed');
+
+      const blob = await res.blob();
+      currentAudioUrl = URL.createObjectURL(blob);
+
+      audio.src = currentAudioUrl;
+      playerWrap.classList.add('visible');
+      audio.play();
+
+      btn.classList.add('playing');
+      btn.innerHTML = '🔊 <span class="voice-label-text">फिर से सुनें</span>';
+      btn.disabled = false;
+
+      audio.onplay  = () => btn.classList.add('playing');
+      audio.onpause = () => btn.classList.remove('playing');
+      audio.onended = () => btn.classList.remove('playing');
+
+    } catch (err) {
+      btn.innerHTML = '🔊 <span class="voice-label-text">हिंदी में सुनें</span>';
+      btn.disabled = false;
+      console.error('Voice error:', err);
+      alert('आवाज़ तैयार नहीं हो सकी। कृपया दोबारा कोशिश करें।');
+    }
+  }
+
+  // ── Render Results ─────────────────────────────────────────────────────────
+  function renderResults(data) {
+    const { profile, guide, fraud } = data;
+    const section = document.getElementById('resultsSection');
+    section.classList.add('visible');
+>>>>>>> Stashed changes
 
   section.innerHTML=`
     <div class="results-header">
@@ -532,6 +973,7 @@ function schemeCard(s, i, profile) {
   const diff=s.difficultyLevel||'medium';
   const diffIcon=diff==='easy'?'🟢':diff==='medium'?'🟡':'🔴';
 
+<<<<<<< Updated upstream
   return `<div class="scheme-card">
     <div class="scheme-card-header">
       <div class="rank-badge ${rc}">#${rank}</div>
@@ -540,6 +982,49 @@ function schemeCard(s, i, profile) {
         <div class="scheme-meta">
           <span class="badge ${s.type==='central'?'badge-central':'badge-state'}">${s.type==='central'?'🇮🇳 Central':'🏛️ State'}</span>
           ${cats}
+=======
+    const fraudSection = fraud.isSuspicious ? `
+      <div class="fraud-warning">
+        <div class="fraud-icon">⚠️</div>
+        <div class="fraud-content">
+          <h3>Fraud Warning Detected</h3>
+          <p>${fraud.warningMessage || ''}</p>
+          <ul class="safety-tips">
+            ${(fraud.tips || []).map(t => `<li>${t}</li>`).join('')}
+          </ul>
+        </div>
+      </div>` : '';
+
+    const safetyTips = (fraud.tips || [
+      'All government schemes are FREE to apply — never pay agents',
+      'Only use official .gov.in websites',
+      'Never share OTP or UPI PIN for "verification"',
+      'Aadhaar is free — no registration charges',
+    ]).slice(0, 4);
+
+    section.innerHTML = `
+      <div class="results-header">
+        <div>
+          <div class="results-title">Your Eligible Schemes</div>
+          <div class="results-subtitle">${profile.summary}</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <div class="scheme-count">${guide.rankedSchemes.length} Schemes Found</div>
+          <button class="voice-btn" id="voice-btn" onclick="handleVoicePlay()">
+            🔊 <span class="voice-label-text">हिंदी में सुनें</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="voice-player-wrap" id="voice-player-wrap">
+        <span class="voice-label">🔊 हिंदी</span>
+        <audio id="scheme-audio" controls></audio>
+      </div>
+
+      <div class="profile-card">
+        <div class="profile-row">
+          ${profileTags.map(t => `<span class="profile-tag">${t}</span>`).join('')}
+>>>>>>> Stashed changes
         </div>
       </div>
       ${s.benefitAmount?`<div class="amount-value">${s.benefitAmount}</div>`:''}
@@ -577,6 +1062,7 @@ async function startAssistedApply(scheme) {
   document.getElementById('applyModal').style.display = 'flex';
   showModalLoading('Preparing your application...');
 
+<<<<<<< Updated upstream
   try {
     const res = await fetch(`${API}/api/apply/start`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scheme,profile})});
     const data = await res.json();
@@ -584,6 +1070,20 @@ async function startAssistedApply(scheme) {
     showModalStep1(data);
   } catch(e) {
     showModalError('Failed to prepare application: '+e.message);
+=======
+      ${fraudSection}
+
+      <div class="safety-card">
+        <h3>🛡️ Stay Safe — Important Tips</h3>
+        <div class="safety-tips-grid">
+          ${safetyTips.map(t => `<div class="safety-tip-item">✓ ${t}</div>`).join('')}
+        </div>
+      </div>
+    `;
+
+    // Store guide for voice
+    enableVoiceBtn(guide);
+>>>>>>> Stashed changes
   }
 }
 
@@ -661,6 +1161,7 @@ function showModalStep2(data) {
     ${data.currentPage?`<div style="background:#FFF8E1;border:1px solid #FFE082;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:16px">📍 <strong>You should be on:</strong> ${data.currentPage}</div>`:''}
     ${data.warning?`<div style="background:var(--red-lt);border:1px solid #EF9A9A;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:16px;color:var(--red)">⚠️ ${data.warning}</div>`:''}
 
+<<<<<<< Updated upstream
     <div>${steps}</div>
 
     <div style="margin-top:20px">
@@ -732,6 +1233,43 @@ function now(){return new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minu
 // Init chat on load
 window.addEventListener('DOMContentLoaded', () => { initChat(); });
 document.getElementById('userInput')?.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')findSchemes();});
+=======
+  // ── Voice Input (mic) ──────────────────────────────────────────────────────
+  function toggleMic() {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('Voice input not supported in this browser. Please use Chrome.');
+      return;
+    }
+    if (isRecording) {
+      recognition?.stop();
+      return;
+    }
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SR();
+    recognition.lang = isHindi ? 'hi-IN' : 'en-IN';
+    recognition.interimResults = false;
+    recognition.onstart = () => {
+      isRecording = true;
+      document.getElementById('micBtn').classList.add('recording');
+      document.getElementById('micBtn').textContent = '⏹';
+    };
+    recognition.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      document.getElementById('userInput').value += (document.getElementById('userInput').value ? ' ' : '') + transcript;
+    };
+    recognition.onend = () => {
+      isRecording = false;
+      document.getElementById('micBtn').classList.remove('recording');
+      document.getElementById('micBtn').textContent = '🎤';
+    };
+    recognition.start();
+  }
+
+  // Allow Ctrl+Enter to submit
+  document.getElementById('userInput').addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') findSchemes();
+  });
+>>>>>>> Stashed changes
 </script>
 </body>
 </html>

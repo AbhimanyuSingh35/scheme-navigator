@@ -1,1 +1,8 @@
 .env
+.env
+node_modules/
+test.wav
+test2.wav
+voice_test.wav
+.env
+

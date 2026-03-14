@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+<<<<<<< Updated upstream
 import {
   runSchemeNavigator,
   startNewConversation,
@@ -17,6 +18,13 @@ import {
   failApplication,
 } from "./apply/applyAgent.js";
 import { getSession } from "./apply/applicationStore.js";
+=======
+import { convertGuideToHindi } from "./services/sarvamTTS.js";
+
+
+const app = express();
+const PORT = process.env.PORT ?? 3001;
+>>>>>>> Stashed changes
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -72,7 +80,12 @@ app.post("/api/find-schemes-stream", async (req, res) => {
   }
   return;
 });
+// Voice endpoint: converts guide result to Hindi speech
+app.post("/api/voice", async (req, res) => {
+  try {
+    const { guide } = req.body as { guide: { topPriorityMessage: string; rankedSchemes: any[] } };
 
+<<<<<<< Updated upstream
 // ── Conversational Profile Endpoints ──────────────────────────────────────────
 
 // Start a new conversation
@@ -184,11 +197,32 @@ app.get("/api/apply/:sessionId", (req, res) => {
 });
 
 // ── Start ──────────────────────────────────────────────────────────────────────
+=======
+    if (!guide?.rankedSchemes) {
+      return res.status(400).json({ error: "guide result is required" });
+    }
+
+    const audioBuffer = await convertGuideToHindi(guide);
+
+    res.set({
+      "Content-Type": "audio/wav",
+      "Content-Length": String(audioBuffer.length),
+    });
+    res.send(audioBuffer);
+  } catch (err) {
+    console.error("Sarvam TTS error:", err);
+    res.status(500).json({ error: "Voice generation failed", details: String(err) });
+  }
+});
+
+// Replace your existing app.listen log with this
+>>>>>>> Stashed changes
 app.listen(PORT, () => {
   console.log(`
 ╔══════════════════════════════════════════════════════╗
 ║     🇮🇳  AI Government Scheme Navigator              ║
 ╠══════════════════════════════════════════════════════╣
+<<<<<<< Updated upstream
 ║  Open browser: http://localhost:${PORT}                ║
 ║                                                      ║
 ║  Agents:                                             ║
@@ -198,5 +232,19 @@ app.listen(PORT, () => {
 ║  ✓ Fraud Detection Agent                             ║
 ║  ✓ Assisted Apply Agent (suspend/resume)             ║
 ╚══════════════════════════════════════════════════════╝
+=======
+║  Server: http://localhost:${PORT}                      ║
+║  API:    POST /api/find-schemes                      ║
+║  Stream: POST /api/find-schemes-stream               ║
+║  Voice:  POST /api/voice                             ║
+╚══════════════════════════════════════════════════════╝
+
+Agents ready:
+  ✓ Profile Understanding Agent
+  ✓ Scheme Discovery & Eligibility Agent  
+  ✓ Benefit Ranking & Application Guide Agent
+  ✓ Fraud Detection Agent
+  ✓ Hindi Voice (Sarvam AI)
+>>>>>>> Stashed changes
   `);
 });
