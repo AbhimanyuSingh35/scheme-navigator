@@ -1,1068 +1,737 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Sarkar Sahayak — AI Government Scheme Navigator 🇮🇳</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet"/>
   <style>
-    :root {
-      --saffron:    #FF9933;
-      --saffron-lt: #FFE0B2;
-      --white:      #FFFFFF;
-      --green:      #138808;
-      --green-lt:   #C8E6C9;
-      --navy:       #000080;
-      --navy-lt:    #E8EAF6;
-      --gold:       #D4A017;
-      --ink:        #1A1A2E;
-      --ink-soft:   #3D3D5C;
-      --surface:    #F8F7F2;
-      --card:       #FFFFFF;
-      --muted:      #8A8A9A;
-      --red:        #C62828;
-      --red-lt:     #FFEBEE;
-      --radius:     16px;
-      --radius-sm:  10px;
-      --shadow:     0 4px 24px rgba(0,0,128,0.08);
-      --shadow-md:  0 8px 40px rgba(0,0,128,0.14);
+    :root{
+      --saffron:#FF9933;--saffron-lt:#FFF3E0;
+      --green:#138808;--green-lt:#C8E6C9;
+      --navy:#000080;--navy-lt:#E8EAF6;
+      --gold:#D4A017;--ink:#1A1A2E;--ink-soft:#3D3D5C;
+      --surface:#F8F7F2;--card:#FFFFFF;--muted:#8A8A9A;
+      --red:#C62828;--red-lt:#FFEBEE;
+      --radius:16px;--radius-sm:10px;
+      --shadow:0 4px 24px rgba(0,0,128,.08);
+      --shadow-md:0 8px 40px rgba(0,0,128,.14);
     }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink);min-height:100vh;overflow-x:hidden}
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* HEADER */
+    .header{background:linear-gradient(135deg,var(--navy) 0%,#1a237e 60%,#283593 100%);color:white;position:relative;overflow:hidden}
+    .header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,153,51,.04) 40px,rgba(255,153,51,.04) 80px)}
+    .header-stripe{height:6px;background:linear-gradient(90deg,var(--saffron) 0%,var(--saffron) 33.3%,white 33.3%,white 66.6%,var(--green) 66.6%,var(--green) 100%)}
+    .header-inner{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:28px 24px 32px;text-align:center}
+    .header h1{font-family:'Tiro Devanagari Hindi',serif;font-size:clamp(26px,5vw,42px);font-weight:400;margin-bottom:6px}
+    .header h1 span{color:var(--saffron)}
+    .header-sub{font-size:14px;color:rgba(255,255,255,.7);font-weight:300}
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--surface);
-      color: var(--ink);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+    /* MODE TABS */
+    .mode-tabs{display:flex;max-width:900px;margin:0 auto;padding:0 20px}
+    .mode-tab{flex:1;padding:14px;text-align:center;font-size:14px;font-weight:600;cursor:pointer;border:none;background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);transition:all .2s;border-bottom:3px solid transparent}
+    .mode-tab.active{background:rgba(255,255,255,.15);color:white;border-bottom-color:var(--saffron)}
+    .mode-tab:hover:not(.active){background:rgba(255,255,255,.1);color:rgba(255,255,255,.85)}
 
-    /* ── HEADER ── */
-    .header {
-      background: linear-gradient(135deg, var(--navy) 0%, #1a237e 60%, #283593 100%);
-      color: white;
-      padding: 0;
-      position: relative;
-      overflow: hidden;
-    }
-    .header::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: 
-        repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,153,51,0.04) 40px, rgba(255,153,51,0.04) 80px),
-        repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(19,136,8,0.03) 40px, rgba(19,136,8,0.03) 80px);
-    }
-    .header-stripe {
-      height: 6px;
-      background: linear-gradient(90deg, var(--saffron) 0%, var(--saffron) 33.3%, white 33.3%, white 66.6%, var(--green) 66.6%, var(--green) 100%);
-    }
-    .header-inner {
-      position: relative;
-      z-index: 1;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 36px 24px 40px;
-      text-align: center;
-    }
-    .header-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 6px 16px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.85);
-      margin-bottom: 18px;
-    }
-    .header h1 {
-      font-family: 'Tiro Devanagari Hindi', serif;
-      font-size: clamp(28px, 5vw, 46px);
-      font-weight: 400;
-      letter-spacing: -0.5px;
-      line-height: 1.2;
-      margin-bottom: 8px;
-    }
-    .header h1 span { color: var(--saffron); }
-    .header-sub {
-      font-size: 15px;
-      color: rgba(255,255,255,0.7);
-      font-weight: 300;
-      margin-bottom: 6px;
-    }
-    .header-hindi {
-      font-family: 'Tiro Devanagari Hindi', serif;
-      font-size: 17px;
-      color: rgba(255,255,255,0.55);
-    }
+    /* MAIN */
+    .main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
+    .mode-panel{display:none}
+    .mode-panel.active{display:block;animation:fadeIn .3s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-    /* ── MAIN ── */
-    .main {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 36px 20px 80px;
-    }
+    /* CARDS */
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(0,0,128,.07);padding:28px;margin-bottom:24px}
 
-    /* ── INPUT CARD ── */
-    .input-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-md);
-      padding: 32px;
-      margin-bottom: 32px;
-      border: 1px solid rgba(0,0,128,0.07);
-    }
-    .input-label {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 12px;
-      display: block;
-    }
-    .textarea-wrap {
-      position: relative;
-    }
-    textarea {
-      width: 100%;
-      min-height: 110px;
-      border: 2px solid #E0E0EE;
-      border-radius: var(--radius-sm);
-      padding: 16px 52px 16px 16px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 16px;
-      color: var(--ink);
-      background: #FAFAFA;
-      resize: vertical;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
-    }
-    textarea:focus {
-      border-color: var(--navy);
-      box-shadow: 0 0 0 3px rgba(0,0,128,0.1);
-      background: white;
-    }
-    textarea::placeholder { color: #BBBBC8; }
-    .mic-btn {
-      position: absolute;
-      right: 14px;
-      top: 14px;
-      background: var(--navy-lt);
-      border: none;
-      border-radius: 50%;
-      width: 34px;
-      height: 34px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-      color: var(--navy);
-    }
-    .mic-btn:hover { background: var(--navy); color: white; transform: scale(1.08); }
-    .mic-btn.recording { background: var(--red); color: white; animation: pulse 1s infinite; }
-    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+    /* CHAT UI */
+    .chat-window{height:420px;overflow-y:auto;border:2px solid #E0E0EE;border-radius:var(--radius-sm);padding:16px;background:#FAFAFA;margin-bottom:16px;scroll-behavior:smooth}
+    .chat-bubble{max-width:82%;margin-bottom:14px;animation:fadeIn .25s ease}
+    .chat-bubble.agent{align-self:flex-start}
+    .chat-bubble.user{margin-left:auto}
+    .bubble-text{padding:12px 16px;border-radius:18px;font-size:14px;line-height:1.6}
+    .agent .bubble-text{background:var(--navy-lt);color:var(--ink);border-bottom-left-radius:4px}
+    .user .bubble-text{background:var(--navy);color:white;border-bottom-right-radius:4px}
+    .bubble-time{font-size:11px;color:var(--muted);margin-top:4px;padding:0 4px}
+    .agent .bubble-time{text-align:left}
+    .user .bubble-time{text-align:right}
+    .typing-indicator{display:flex;gap:4px;padding:12px 16px;background:var(--navy-lt);border-radius:18px;width:fit-content}
+    .typing-dot{width:8px;height:8px;border-radius:50%;background:var(--navy);opacity:.4;animation:typingBounce 1.2s infinite}
+    .typing-dot:nth-child(2){animation-delay:.2s}
+    .typing-dot:nth-child(3){animation-delay:.4s}
+    @keyframes typingBounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px);opacity:1}}
+    .chat-input-row{display:flex;gap:10px}
+    .chat-input{flex:1;border:2px solid #E0E0EE;border-radius:var(--radius-sm);padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s}
+    .chat-input:focus{border-color:var(--navy)}
+    .chat-send-btn{background:var(--navy);color:white;border:none;border-radius:var(--radius-sm);padding:12px 20px;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+    .chat-send-btn:hover:not(:disabled){background:#1a237e}
+    .chat-send-btn:disabled{opacity:.5;cursor:not-allowed}
 
-    .examples {
-      margin-top: 12px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .example-pill {
-      font-size: 13px;
-      padding: 5px 14px;
-      border-radius: 999px;
-      background: var(--navy-lt);
-      color: var(--navy);
-      border: none;
-      cursor: pointer;
-      transition: all 0.18s;
-      font-family: 'DM Sans', sans-serif;
-    }
-    .example-pill:hover { background: var(--navy); color: white; }
+    /* ONE-SHOT INPUT */
+    .input-label{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:block}
+    .textarea-wrap{position:relative}
+    textarea{width:100%;min-height:100px;border:2px solid #E0E0EE;border-radius:var(--radius-sm);padding:14px 50px 14px 14px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--ink);background:#FAFAFA;resize:vertical;outline:none;transition:border-color .2s,box-shadow .2s}
+    textarea:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(0,0,128,.1);background:white}
+    .mic-btn{position:absolute;right:12px;top:12px;background:var(--navy-lt);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:14px}
+    .mic-btn:hover{background:var(--navy);color:white}
+    .mic-btn.recording{background:var(--red);color:white;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+    .examples{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .example-pill{font-size:12px;padding:5px 12px;border-radius:999px;background:var(--navy-lt);color:var(--navy);border:none;cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif}
+    .example-pill:hover{background:var(--navy);color:white}
+    .submit-btn{width:100%;margin-top:16px;padding:14px;background:linear-gradient(135deg,var(--navy),#283593);color:white;border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+    .submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,128,.28)}
+    .submit-btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
 
-    .submit-btn {
-      width: 100%;
-      margin-top: 20px;
-      padding: 16px 32px;
-      background: linear-gradient(135deg, var(--navy) 0%, #283593 100%);
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 0.02em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    .submit-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(0,0,128,0.28);
-    }
-    .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+    /* AGENT PROGRESS */
+    .progress-section{display:none;margin-bottom:24px}
+    .progress-section.visible{display:block;animation:fadeIn .3s ease}
+    .progress-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+    .agent-step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #F0F0F6}
+    .agent-step:last-child{border-bottom:none}
+    .step-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:all .3s}
+    .step-icon.idle{background:#F0F0F6}
+    .step-icon.running{background:var(--saffron-lt);animation:spin 1.5s linear infinite}
+    @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    .step-icon.done{background:var(--green-lt)}
+    .step-name{font-size:13px;font-weight:600;color:var(--ink)}
+    .step-msg{font-size:12px;color:var(--muted);margin-top:2px}
 
-    /* ── AGENT PROGRESS ── */
-    .progress-section {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 24px 28px;
-      margin-bottom: 28px;
-      border: 1px solid rgba(0,0,128,0.06);
-      display: none;
-    }
-    .progress-section.visible { display: block; animation: fadeIn 0.3s ease; }
-    .progress-title {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 18px;
-    }
-    .agent-step {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 0;
-      border-bottom: 1px solid #F0F0F6;
-    }
-    .agent-step:last-child { border-bottom: none; }
-    .step-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      flex-shrink: 0;
-      transition: all 0.3s;
-    }
-    .step-icon.idle { background: #F0F0F6; }
-    .step-icon.running { background: var(--saffron-lt); animation: spin 1.5s linear infinite; }
-    @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-    .step-icon.done { background: var(--green-lt); }
-    .step-icon.error { background: var(--red-lt); }
-    .step-info { flex: 1; }
-    .step-name { font-size: 14px; font-weight: 600; color: var(--ink); }
-    .step-msg { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    /* RESULTS */
+    .results-section{display:none}
+    .results-section.visible{display:block;animation:fadeIn .4s ease}
+    .results-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+    .results-title{font-size:20px;font-weight:700}
+    .results-subtitle{font-size:13px;color:var(--muted);margin-top:3px}
+    .scheme-count{background:var(--green);color:white;font-size:12px;font-weight:700;padding:5px 14px;border-radius:999px}
+    .profile-card{background:linear-gradient(135deg,var(--navy-lt),#E8F5E9);border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;border:1px solid rgba(0,0,128,.1)}
+    .profile-tags{display:flex;flex-wrap:wrap;gap:8px}
+    .profile-tag{background:white;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:500;color:var(--ink-soft)}
+    .priority-banner{background:linear-gradient(135deg,#FFF3E0,#FFF8E1);border:2px solid var(--saffron);border-radius:var(--radius-sm);padding:16px 20px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start}
+    .schemes-grid{display:flex;flex-direction:column;gap:20px}
 
-    /* ── RESULTS ── */
-    .results-section { display: none; }
-    .results-section.visible { display: block; animation: fadeIn 0.4s ease; }
-    @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    /* SCHEME CARD */
+    .scheme-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(0,0,128,.07);overflow:hidden;transition:box-shadow .2s,transform .2s}
+    .scheme-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+    .scheme-card-header{padding:18px 22px 14px;border-bottom:1px solid #F0F0F6;display:flex;gap:12px;align-items:flex-start}
+    .rank-badge{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+    .rank-1{background:linear-gradient(135deg,#FFD700,#FFA000);color:white}
+    .rank-2{background:linear-gradient(135deg,#B0BEC5,#90A4AE);color:white}
+    .rank-3{background:linear-gradient(135deg,#CD7F32,#A1640E);color:white}
+    .rank-n{background:var(--navy-lt);color:var(--navy)}
+    .scheme-name{font-size:16px;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:5px}
+    .scheme-meta{display:flex;flex-wrap:wrap;gap:6px}
+    .badge{font-size:10px;font-weight:600;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+    .badge-central{background:var(--navy-lt);color:var(--navy)}
+    .badge-state{background:var(--green-lt);color:var(--green)}
+    .badge-category{background:#F3E5F5;color:#6A1B9A}
+    .amount-value{font-size:16px;font-weight:700;color:var(--green);white-space:nowrap;margin-left:auto}
+    .scheme-card-body{padding:18px 22px}
+    .impact-text{font-size:13px;line-height:1.7;color:var(--ink-soft);padding:10px 14px;background:var(--navy-lt);border-radius:8px;border-left:3px solid var(--navy);margin-bottom:14px}
+    .section-heading{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:14px}
+    details summary{cursor:pointer;font-size:12px;font-weight:600;color:var(--navy);padding:6px 0;list-style:none;display:flex;align-items:center;gap:5px;user-select:none}
+    details summary::before{content:'▶';font-size:9px;transition:transform .2s}
+    details[open] summary::before{transform:rotate(90deg)}
+    .docs-list,.steps-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:8px}
+    .docs-list li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft)}
+    .docs-list li::before{content:'☐';font-size:15px;color:var(--navy);flex-shrink:0}
+    .steps-list{counter-reset:steps}
+    .steps-list li{display:flex;gap:10px;font-size:13px;color:var(--ink-soft);counter-increment:steps}
+    .steps-list li::before{content:counter(steps);background:var(--saffron);color:white;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+    .quick-tip{background:linear-gradient(135deg,#E8F5E9,#F1F8E9);border:1px solid var(--green-lt);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--green);font-weight:500;margin-top:14px;display:flex;gap:7px}
+    .scheme-card-footer{padding:12px 22px;background:#FAFBFF;border-top:1px solid #F0F0F6;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .apply-btn{background:var(--navy);color:white;text-decoration:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;transition:all .18s;display:inline-flex;align-items:center;gap:5px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+    .apply-btn:hover{background:#1a237e;transform:translateY(-1px)}
+    .apply-btn.assisted{background:var(--green)}
+    .apply-btn.assisted:hover{background:#0d6e06}
+    .official-link{color:var(--muted);text-decoration:none;font-size:12px;display:flex;align-items:center;gap:4px}
+    .official-link:hover{color:var(--navy)}
+    .time-badge{font-size:11px;color:var(--muted);background:#F0F0F6;padding:3px 9px;border-radius:999px}
+    .diff-easy{color:var(--green)}
+    .diff-medium{color:var(--gold)}
+    .diff-hard{color:var(--red)}
 
-    .results-header {
-      margin-bottom: 24px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .results-title { font-size: 22px; font-weight: 700; color: var(--ink); }
-    .results-subtitle { font-size: 14px; color: var(--muted); margin-top: 4px; }
-    .scheme-count {
-      background: var(--green);
-      color: white;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 6px 16px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
+    /* APPLY MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .2s ease}
+    .modal{background:white;border-radius:var(--radius);max-width:600px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+    .modal-header{padding:22px 24px 16px;border-bottom:1px solid #F0F0F6;display:flex;justify-content:space-between;align-items:flex-start}
+    .modal-title{font-size:18px;font-weight:700;color:var(--ink)}
+    .modal-subtitle{font-size:13px;color:var(--muted);margin-top:3px}
+    .modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);padding:4px;line-height:1}
+    .modal-close:hover{color:var(--ink)}
+    .modal-body{padding:20px 24px}
+    .modal-footer{padding:16px 24px;border-top:1px solid #F0F0F6;display:flex;gap:10px;justify-content:flex-end}
 
-    /* Profile card */
-    .profile-card {
-      background: linear-gradient(135deg, var(--navy-lt) 0%, #E8F5E9 100%);
-      border-radius: var(--radius-sm);
-      padding: 18px 22px;
-      margin-bottom: 24px;
-      border: 1px solid rgba(0,0,128,0.1);
-    }
-    .profile-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .profile-tag {
-      background: white;
-      border-radius: 999px;
-      padding: 5px 14px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--ink-soft);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
+    /* Apply steps */
+    .apply-step{display:flex;gap:16px;margin-bottom:24px}
+    .apply-step-num{width:32px;height:32px;border-radius:50%;background:var(--navy);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+    .apply-step-num.done{background:var(--green)}
+    .apply-step-num.active{background:var(--saffron);animation:pulse 1.5s infinite}
+    .apply-step-content h4{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+    .apply-step-content p{font-size:13px;color:var(--ink-soft);line-height:1.6}
 
-    /* Priority banner */
-    .priority-banner {
-      background: linear-gradient(135deg, #FFF3E0 0%, #FFF8E1 100%);
-      border: 2px solid var(--saffron);
-      border-radius: var(--radius-sm);
-      padding: 18px 22px;
-      margin-bottom: 24px;
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-    }
-    .priority-icon { font-size: 28px; flex-shrink: 0; }
-    .priority-text { font-size: 14px; line-height: 1.6; color: var(--ink-soft); }
+    /* Login box */
+    .login-box{background:var(--saffron-lt);border:2px solid var(--saffron);border-radius:var(--radius-sm);padding:18px;margin:16px 0}
+    .login-box h4{font-size:14px;font-weight:700;color:#E65100;margin-bottom:8px}
+    .login-box p{font-size:13px;color:#BF360C;line-height:1.6;margin-bottom:12px}
+    .open-portal-btn{background:var(--saffron);color:white;border:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+    .open-portal-btn:hover{background:#E65100}
 
-    /* Scheme cards */
-    .schemes-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .scheme-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(0,0,128,0.07);
-      overflow: hidden;
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-    .scheme-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-2px);
-    }
-    .scheme-card-header {
-      padding: 20px 24px 16px;
-      border-bottom: 1px solid #F0F0F6;
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-    }
-    .rank-badge {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 15px;
-      flex-shrink: 0;
-    }
-    .rank-1 { background: linear-gradient(135deg, #FFD700, #FFA000); color: white; }
-    .rank-2 { background: linear-gradient(135deg, #B0BEC5, #90A4AE); color: white; }
-    .rank-3 { background: linear-gradient(135deg, #CD7F32, #A1640E); color: white; }
-    .rank-n { background: var(--navy-lt); color: var(--navy); }
+    /* Prefill table */
+    .prefill-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+    .prefill-table th{text-align:left;padding:8px 10px;background:#F8F8FF;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid #E0E0EE}
+    .prefill-table td{padding:8px 10px;border-bottom:1px solid #F0F0F6;vertical-align:top}
+    .prefill-table tr:last-child td{border-bottom:none}
+    .needs-input{color:var(--red);font-style:italic}
+    .prefilled{color:var(--green);font-weight:500}
 
-    .scheme-header-info { flex: 1 }
-    .scheme-name {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--ink);
-      line-height: 1.3;
-      margin-bottom: 5px;
-    }
-    .scheme-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 999px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .badge-central { background: var(--navy-lt); color: var(--navy); }
-    .badge-state   { background: var(--green-lt); color: var(--green); }
-    .badge-category { background: #F3E5F5; color: #6A1B9A; }
+    /* Doc checklist */
+    .doc-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #F0F0F6;font-size:13px}
+    .doc-item:last-child{border-bottom:none}
+    .doc-check{width:18px;height:18px;cursor:pointer;accent-color:var(--green)}
 
-    .benefit-amount {
-      margin-left: auto;
-      text-align: right;
-      flex-shrink: 0;
-    }
-    .amount-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-    .amount-value { font-size: 18px; font-weight: 700; color: var(--green); white-space: nowrap; }
+    /* Confirmation */
+    .confirm-input{width:100%;border:2px solid #E0E0EE;border-radius:var(--radius-sm);padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-top:8px}
+    .confirm-input:focus{border-color:var(--green)}
+    .success-box{background:#E8F5E9;border:2px solid var(--green);border-radius:var(--radius-sm);padding:18px;text-align:center}
+    .success-box h3{font-size:18px;color:var(--green);margin-bottom:6px}
+    .success-box p{font-size:13px;color:#1B5E20}
 
-    .scheme-card-body { padding: 20px 24px; }
-    .impact-text {
-      font-size: 14px;
-      line-height: 1.7;
-      color: var(--ink-soft);
-      margin-bottom: 16px;
-      padding: 12px 16px;
-      background: var(--navy-lt);
-      border-radius: 8px;
-      border-left: 3px solid var(--navy);
-    }
-
-    .section-heading {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 10px;
-      margin-top: 16px;
-    }
-    .docs-list, .steps-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-    .docs-list li {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      font-size: 14px;
-      color: var(--ink-soft);
-    }
-    .docs-list li::before {
-      content: '☐';
-      font-size: 16px;
-      color: var(--navy);
-      flex-shrink: 0;
-    }
-    .steps-list { counter-reset: steps; }
-    .steps-list li {
-      display: flex;
-      gap: 12px;
-      font-size: 14px;
-      color: var(--ink-soft);
-      counter-increment: steps;
-    }
-    .steps-list li::before {
-      content: counter(steps);
-      background: var(--saffron);
-      color: white;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .quick-tip {
-      background: linear-gradient(135deg, #E8F5E9, #F1F8E9);
-      border: 1px solid var(--green-lt);
-      border-radius: 8px;
-      padding: 12px 16px;
-      font-size: 14px;
-      color: var(--green);
-      font-weight: 500;
-      margin-top: 16px;
-      display: flex;
-      gap: 8px;
-    }
-
-    .scheme-card-footer {
-      padding: 14px 24px;
-      background: #FAFBFF;
-      border-top: 1px solid #F0F0F6;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .apply-btn {
-      background: var(--navy);
-      color: white;
-      text-decoration: none;
-      padding: 9px 22px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 0.18s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .apply-btn:hover { background: #1a237e; transform: translateY(-1px); }
-    .official-link {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .official-link:hover { color: var(--navy); }
-    .difficulty {
-      margin-left: auto;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      color: var(--muted);
-    }
-    .diff-easy   { color: var(--green); }
-    .diff-medium { color: var(--gold); }
-    .diff-hard   { color: var(--red); }
-    .time-badge  {
-      font-size: 12px;
-      color: var(--muted);
-      background: #F0F0F6;
-      padding: 4px 10px;
-      border-radius: 999px;
-    }
-
-    /* Fraud warning */
-    .fraud-warning {
-      background: var(--red-lt);
-      border: 2px solid #EF9A9A;
-      border-radius: var(--radius-sm);
-      padding: 18px 22px;
-      margin-top: 28px;
-      display: flex;
-      gap: 14px;
-    }
-    .fraud-icon { font-size: 28px; flex-shrink: 0; }
-    .fraud-content h3 { font-size: 16px; font-weight: 700; color: var(--red); margin-bottom: 8px; }
-    .fraud-content p { font-size: 14px; color: #B71C1C; line-height: 1.6; }
-    .safety-tips { margin-top: 10px; }
-    .safety-tips li { font-size: 13px; color: #C62828; margin-bottom: 4px; padding-left: 16px; position: relative; }
-    .safety-tips li::before { content: '⚠️'; position: absolute; left: 0; font-size: 11px; }
-
-    /* Safety card (always show) */
-    .safety-card {
-      background: #F3F4FF;
-      border-radius: var(--radius-sm);
-      padding: 18px 22px;
-      margin-top: 28px;
-      border: 1px solid #C5CAE9;
-    }
-    .safety-card h3 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
-    .safety-tips-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-    .safety-tip-item {
-      background: white;
-      border: 1px solid #C5CAE9;
-      border-radius: 8px;
-      padding: 8px 14px;
-      font-size: 13px;
-      color: var(--ink-soft);
-    }
-
-    /* Empty state */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-    }
-    .empty-icon { font-size: 64px; margin-bottom: 16px; }
-    .empty-title { font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
-    .empty-text { font-size: 15px; color: var(--muted); line-height: 1.6; }
+    /* Safety */
+    .safety-card{background:#F3F4FF;border-radius:var(--radius-sm);padding:16px 20px;margin-top:24px;border:1px solid #C5CAE9}
+    .safety-card h3{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px}
+    .safety-tips-grid{display:flex;flex-wrap:wrap;gap:6px}
+    .safety-tip-item{background:white;border:1px solid #C5CAE9;border-radius:8px;padding:6px 12px;font-size:12px;color:var(--ink-soft)}
 
     /* Error */
-    .error-card {
-      background: var(--red-lt);
-      border: 1px solid #FFCDD2;
-      border-radius: var(--radius-sm);
-      padding: 20px 24px;
-    }
-    .error-card h3 { color: var(--red); margin-bottom: 8px; }
-    .error-card p { color: #B71C1C; font-size: 14px; }
+    .error-card{background:var(--red-lt);border:1px solid #FFCDD2;border-radius:var(--radius-sm);padding:18px}
+    .error-card h3{color:var(--red);margin-bottom:6px}
+    .error-card p{font-size:13px;color:#B71C1C}
 
-    /* Language toggle */
-    .lang-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: white;
-      border: 2px solid var(--navy);
-      border-radius: 999px;
-      padding: 6px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      color: var(--navy);
-      transition: all 0.2s;
-      z-index: 100;
-    }
-    .lang-toggle:hover { background: var(--navy); color: white; }
-
-    /* Collapsible */
-    details { }
-    summary {
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--navy);
-      padding: 8px 0;
-      user-select: none;
-      list-style: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    summary::before { content: '▶'; font-size: 9px; transition: transform 0.2s; }
-    details[open] summary::before { transform: rotate(90deg); }
-
-    @media (max-width: 600px) {
-      .header-inner { padding: 28px 16px 32px; }
-      .input-card, .scheme-card-body { padding: 20px 16px; }
-      .scheme-card-header { padding: 16px; }
-      .scheme-card-footer { padding: 12px 16px; }
-      .benefit-amount { display: none; }
+    @media(max-width:600px){
+      .scheme-card-header,.scheme-card-body,.scheme-card-footer{padding:14px}
+      .amount-value{display:none}
+      .modal{border-radius:var(--radius) var(--radius) 0 0;margin-top:auto}
     }
   </style>
 </head>
 <body>
 
-<button class="lang-toggle" onclick="toggleLanguage()" id="langBtn">हिंदी</button>
-
+<!-- HEADER -->
 <header class="header">
   <div class="header-stripe"></div>
   <div class="header-inner">
-    <div class="header-badge">🤖 Multi-Agent AI &nbsp;·&nbsp; 🇮🇳 India</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:5px 14px;border-radius:999px;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.85);margin-bottom:14px">🤖 Multi-Agent AI &nbsp;·&nbsp; 🇮🇳 India</div>
     <h1>Sarkar <span>Sahayak</span></h1>
-    <p class="header-sub">AI Government Scheme Navigator — Find benefits you deserve</p>
-    <p class="header-hindi">सरकारी योजनाओं की जानकारी — आपकी भाषा में</p>
+    <p class="header-sub">AI Government Scheme Navigator — Find &amp; Apply for benefits you deserve</p>
+  </div>
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="switchMode('chat')">💬 Chat Mode</button>
+    <button class="mode-tab" onclick="switchMode('quick')">⚡ Quick Search</button>
   </div>
 </header>
 
 <main class="main">
 
-  <!-- Input Card -->
-  <div class="input-card">
-    <label class="input-label" for="userInput" id="inputLabel">Tell us about yourself</label>
-    <div class="textarea-wrap">
-      <textarea
-        id="userInput"
-        placeholder="Example: I am a 35-year-old farmer from Himachal Pradesh. I own 2 acres of land and earn about ₹1.5 lakh per year. I have a BPL card. Looking for crop insurance and income support schemes."
-        rows="4"
-      ></textarea>
-      <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="Voice input">
-        🎤
+  <!-- ── CHAT MODE ─────────────────────────────────────────────────── -->
+  <div class="mode-panel active" id="panel-chat">
+    <div class="card">
+      <div id="chatWindow" class="chat-window"></div>
+      <div class="chat-input-row">
+        <input class="chat-input" id="chatInput" placeholder="Type your message..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMessage()}"/>
+        <button class="chat-send-btn" id="chatSendBtn" onclick="sendChatMessage()">Send ↵</button>
+      </div>
+      <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px" id="chatSuggestions">
+        <span style="font-size:11px;color:var(--muted);align-self:center">Try:</span>
+        <button class="example-pill" onclick="sendQuick('I am a farmer')">🌾 I am a farmer</button>
+        <button class="example-pill" onclick="sendQuick('Main student hoon')">📚 Main student hoon</button>
+        <button class="example-pill" onclick="sendQuick('I want to start a small business')">💼 Small business</button>
+        <button class="example-pill" onclick="sendQuick('I am a senior citizen')">👴 Senior citizen</button>
+      </div>
+    </div>
+    <div class="results-section" id="chatResults"></div>
+  </div>
+
+  <!-- ── QUICK SEARCH MODE ─────────────────────────────────────────── -->
+  <div class="mode-panel" id="panel-quick">
+    <div class="card">
+      <label class="input-label">Describe yourself in one paragraph</label>
+      <div class="textarea-wrap">
+        <textarea id="userInput" placeholder="Example: I am a 35-year-old farmer from Himachal Pradesh. I own 2 acres of land and earn about ₹1.5 lakh per year. I have a BPL card." rows="4"></textarea>
+        <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="Voice input">🎤</button>
+      </div>
+      <div class="examples">
+        <button class="example-pill" onclick="setExample('farmer')">🌾 Farmer, HP</button>
+        <button class="example-pill" onclick="setExample('student')">📚 Female Student</button>
+        <button class="example-pill" onclick="setExample('entrepreneur')">💼 Woman Entrepreneur</button>
+        <button class="example-pill" onclick="setExample('elderly')">👴 Senior Citizen</button>
+        <button class="example-pill" onclick="setExample('rural')">🏘️ Rural BPL Family</button>
+      </div>
+      <button class="submit-btn" id="submitBtn" onclick="findSchemes()">
+        <span id="btnIcon">🔍</span><span id="btnText">Find My Schemes</span>
       </button>
     </div>
-    <div class="examples">
-      <button class="example-pill" onclick="setExample('farmer')">🌾 Farmer, HP</button>
-      <button class="example-pill" onclick="setExample('student')">📚 Female Student</button>
-      <button class="example-pill" onclick="setExample('entrepreneur')">💼 Woman Entrepreneur</button>
-      <button class="example-pill" onclick="setExample('elderly')">👴 Senior Citizen</button>
-      <button class="example-pill" onclick="setExample('rural')">🏘️ Rural BPL Family</button>
-    </div>
-    <button class="submit-btn" id="submitBtn" onclick="findSchemes()">
-      <span id="btnIcon">🔍</span>
-      <span id="btnText">Find My Schemes</span>
-    </button>
-  </div>
 
-  <!-- Agent Progress -->
-  <div class="progress-section" id="progressSection">
-    <div class="progress-title">AI Agents Working</div>
-    <div id="agentSteps">
-      <div class="agent-step" id="step-profile">
-        <div class="step-icon idle" id="icon-profile">👤</div>
-        <div class="step-info">
-          <div class="step-name">Profile Understanding Agent</div>
-          <div class="step-msg" id="msg-profile">Waiting...</div>
-        </div>
-      </div>
-      <div class="agent-step" id="step-discovery">
-        <div class="step-icon idle" id="icon-discovery">🔍</div>
-        <div class="step-info">
-          <div class="step-name">Scheme Discovery & Eligibility Agent</div>
-          <div class="step-msg" id="msg-discovery">Waiting...</div>
-        </div>
-      </div>
-      <div class="agent-step" id="step-guide">
-        <div class="step-icon idle" id="icon-guide">📋</div>
-        <div class="step-info">
-          <div class="step-name">Benefit Ranking & Application Guide Agent</div>
-          <div class="step-msg" id="msg-guide">Waiting...</div>
-        </div>
-      </div>
-      <div class="agent-step" id="step-fraud">
-        <div class="step-icon idle" id="icon-fraud">🛡️</div>
-        <div class="step-info">
-          <div class="step-name">Fraud Detection Agent</div>
-          <div class="step-msg" id="msg-fraud">Waiting...</div>
-        </div>
-      </div>
+    <!-- Agent Progress -->
+    <div class="card progress-section" id="progressSection">
+      <div class="progress-title">AI Agents Working</div>
+      <div class="agent-step"><div class="step-icon idle" id="icon-profile">👤</div><div><div class="step-name">Profile Understanding Agent</div><div class="step-msg" id="msg-profile">Waiting...</div></div></div>
+      <div class="agent-step"><div class="step-icon idle" id="icon-discovery">🔍</div><div><div class="step-name">Scheme Discovery & Eligibility Agent</div><div class="step-msg" id="msg-discovery">Waiting...</div></div></div>
+      <div class="agent-step"><div class="step-icon idle" id="icon-guide">📋</div><div><div class="step-name">Benefit Ranking & Application Guide Agent</div><div class="step-msg" id="msg-guide">Waiting...</div></div></div>
+      <div class="agent-step"><div class="step-icon idle" id="icon-fraud">🛡️</div><div><div class="step-name">Fraud Detection Agent</div><div class="step-msg" id="msg-fraud">Waiting...</div></div></div>
     </div>
-  </div>
 
-  <!-- Results -->
-  <div class="results-section" id="resultsSection"></div>
+    <div class="results-section" id="quickResults"></div>
+  </div>
 
 </main>
 
+<!-- ── APPLY MODAL ──────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="applyModal" style="display:none">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle">Applying for Scheme</div>
+        <div class="modal-subtitle" id="modalSubtitle">Assisted application with AI</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter"></div>
+  </div>
+</div>
+
 <script>
-  // ── Config ─────────────────────────────────────────────────────────────────
-  // Change this to your backend URL
-  const API_BASE = '';
-  let isHindi = false;
-  let recognition = null;
-  let isRecording = false;
+const API = '';
+const EXAMPLES = {
+  farmer:'I am a 40-year-old farmer from Himachal Pradesh. I own 2 acres of land and earn ₹1.5 lakh per year. I have a BPL card.',
+  student:'I am a 19-year-old girl from Himachal Pradesh. Family income ₹2 lakh/year. First year graduation. SC category. Need scholarship.',
+  entrepreneur:'I am a 28-year-old woman from Karnataka. OBC category. Want to start tiffin business. Have ₹30,000 savings. Need loan of ₹2 lakh.',
+  elderly:'I am a 67-year-old retired person from UP. Income ₹2,000/month. Need pension and free health treatment.',
+  rural:'Rural family in Rajasthan. 5 members. Income ₹80,000/year. BPL card. Kaccha house. Need housing and health support.',
+};
 
-  const EXAMPLES = {
-    farmer: 'I am a 40-year-old farmer from Himachal Pradesh. I own 2 acres of land and earn ₹1.5 lakh per year. I have a BPL card. Looking for crop support and income schemes.',
-    student: 'I am an 19-year-old female student from a poor family in Himachal Pradesh. My family income is ₹2 lakh per year. I am in first year of graduation. Looking for scholarships.',
-    entrepreneur: 'I am a 30-year-old woman entrepreneur from Karnataka. I want to start a small food business. I have savings of ₹50,000 and need a loan of ₹2-3 lakh. I belong to OBC category.',
-    elderly: 'I am a 68-year-old retired person from Uttar Pradesh. My monthly income is very low, about ₹3,000. I live with my son. I need health coverage and pension support.',
-    rural: 'I am from a rural area in Rajasthan. My family of 5 people earns ₹80,000 per year. We have a BPL card. We live in a small kaccha house and need housing and health support.',
-  };
+let currentMode = 'chat';
+let conversationId = null;
+let chatProfile = null;
+let recognition = null;
+let isRecording = false;
+let currentApplySession = null;
+let currentApplyScheme = null;
 
-  function setExample(key) {
-    document.getElementById('userInput').value = EXAMPLES[key];
-  }
+// ── MODE SWITCHING ─────────────────────────────────────────────────────────────
+function switchMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&mode==='chat')||(i===1&&mode==='quick')));
+  document.getElementById('panel-chat').classList.toggle('active', mode==='chat');
+  document.getElementById('panel-quick').classList.toggle('active', mode==='quick');
+  if (mode==='chat' && !conversationId) initChat();
+}
 
-  // ── Agent step mapping ─────────────────────────────────────────────────────
-  const STEP_MAP = {
-    'Profile Understanding Agent': { key: 'profile', icon: '👤' },
-    'Scheme Discovery & Eligibility Agent': { key: 'discovery', icon: '🔍' },
-    'Benefit Ranking & Application Guide Agent': { key: 'guide', icon: '📋' },
-    'Fraud Detection Agent': { key: 'fraud', icon: '🛡️' },
-  };
+// ── CHAT MODE ──────────────────────────────────────────────────────────────────
+async function initChat() {
+  const res = await fetch(`${API}/api/conversation/start`, {method:'POST'});
+  const data = await res.json();
+  conversationId = data.conversationId;
+  appendAgentBubble(data.reply);
+}
 
-  function updateStep(stepName, status, msg) {
-    const entry = Object.entries(STEP_MAP).find(([k]) => stepName.includes(k.split(' ')[0]));
-    if (!entry) return;
-    const [, { key, icon }] = entry;
-    const iconEl = document.getElementById('icon-' + key);
-    const msgEl = document.getElementById('msg-' + key);
-    if (!iconEl || !msgEl) return;
-    iconEl.className = 'step-icon ' + status;
-    iconEl.textContent = status === 'running' ? '⟳' : status === 'done' ? '✓' : icon;
-    if (msg) msgEl.textContent = msg;
-  }
+function appendAgentBubble(text) {
+  const win = document.getElementById('chatWindow');
+  const div = document.createElement('div');
+  div.className = 'chat-bubble agent';
+  div.innerHTML = `<div class="bubble-text">${text.replace(/\n/g,'<br>')}</div><div class="bubble-time">${now()}</div>`;
+  win.appendChild(div);
+  win.scrollTop = win.scrollHeight;
+}
 
-  // ── Main API call ──────────────────────────────────────────────────────────
-  async function findSchemes() {
-    const input = document.getElementById('userInput').value.trim();
-    if (!input || input.length < 10) {
-      alert('Please describe yourself in at least a sentence for best results!');
-      return;
-    }
+function appendUserBubble(text) {
+  const win = document.getElementById('chatWindow');
+  const div = document.createElement('div');
+  div.className = 'chat-bubble user';
+  div.innerHTML = `<div class="bubble-text">${text}</div><div class="bubble-time">${now()}</div>`;
+  win.appendChild(div);
+  win.scrollTop = win.scrollHeight;
+}
 
-    // Reset UI
-    document.getElementById('progressSection').classList.add('visible');
-    document.getElementById('resultsSection').classList.remove('visible');
-    document.getElementById('resultsSection').innerHTML = '';
-    Object.keys(STEP_MAP).forEach(k => {
-      const { key } = STEP_MAP[k];
-      updateStep(k, 'idle', 'Waiting...');
+function showTyping() {
+  const win = document.getElementById('chatWindow');
+  const div = document.createElement('div');
+  div.id = 'typingIndicator';
+  div.className = 'chat-bubble agent';
+  div.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  win.appendChild(div);
+  win.scrollTop = win.scrollHeight;
+}
+
+function hideTyping() {
+  document.getElementById('typingIndicator')?.remove();
+}
+
+async function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+
+  if (!conversationId) await initChat();
+
+  appendUserBubble(msg);
+  document.getElementById('chatSendBtn').disabled = true;
+  showTyping();
+
+  try {
+    const res = await fetch(`${API}/api/conversation/${conversationId}/message`, {
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg})
     });
+    const data = await res.json();
+    hideTyping();
+    appendAgentBubble(data.reply);
 
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    document.getElementById('btnIcon').textContent = '⟳';
-    document.getElementById('btnText').textContent = 'Analyzing...';
+    if (data.isComplete && data.result) {
+      chatProfile = data.result.profile;
+      document.getElementById('chatSuggestions').style.display = 'none';
+      setTimeout(() => renderResults(data.result, 'chatResults'), 400);
+    }
+  } catch(e) {
+    hideTyping();
+    appendAgentBubble('Sorry, something went wrong. Please try again.');
+  } finally {
+    document.getElementById('chatSendBtn').disabled = false;
+  }
+}
 
-    try {
-      // Use SSE streaming endpoint for live progress
-      const response = await fetch(`${API_BASE}/api/find-schemes-stream`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userInput: input }),
-      });
+function sendQuick(text) {
+  document.getElementById('chatInput').value = text;
+  sendChatMessage();
+}
 
-      if (!response.ok || !response.body) {
-        throw new Error(`Server error: ${response.status}`);
-      }
+// ── QUICK SEARCH MODE ──────────────────────────────────────────────────────────
+function setExample(key) { document.getElementById('userInput').value = EXAMPLES[key]; }
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
-      let finalResult = null;
+const STEP_MAP = {
+  'Profile Understanding Agent':'profile',
+  'Scheme Discovery & Eligibility Agent':'discovery',
+  'Benefit Ranking & Application Guide Agent':'guide',
+  'Fraud Detection Agent':'fraud',
+};
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() ?? '';
+function updateStep(name, status, msg) {
+  const key = Object.entries(STEP_MAP).find(([k])=>name.includes(k.split(' ')[0]))?.[1];
+  if(!key) return;
+  const icon = document.getElementById('icon-'+key);
+  const msgEl = document.getElementById('msg-'+key);
+  if(!icon||!msgEl) return;
+  icon.className = 'step-icon '+status;
+  icon.textContent = status==='running'?'⟳':status==='done'?'✓':icon.textContent;
+  if(msg) msgEl.textContent = msg;
+}
 
-        for (const line of lines) {
-          if (line.startsWith('event: ')) {
-            const event = line.slice(7).trim();
-            // next line is data
-            continue;
-          }
-          if (line.startsWith('data: ')) {
-            try {
-              const data = JSON.parse(line.slice(6));
-              if (data.step) {
-                // progress event
-                updateStep(data.step, data.status, data.message);
-              } else if (data.profile) {
-                // result event
-                finalResult = data;
-              }
-            } catch {}
-          }
+async function findSchemes() {
+  const input = document.getElementById('userInput').value.trim();
+  if(!input||input.length<10){alert('Please describe yourself more!');return;}
+
+  document.getElementById('progressSection').classList.add('visible');
+  document.getElementById('quickResults').classList.remove('visible');
+  document.getElementById('quickResults').innerHTML = '';
+  Object.values(STEP_MAP).forEach(k=>{
+    const icon=document.getElementById('icon-'+k);
+    const msg=document.getElementById('msg-'+k);
+    if(icon)icon.className='step-icon idle';
+    if(msg)msg.textContent='Waiting...';
+  });
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled=true;
+  document.getElementById('btnIcon').textContent='⟳';
+  document.getElementById('btnText').textContent='Analyzing...';
+
+  try {
+    const res = await fetch(`${API}/api/find-schemes-stream`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userInput:input})});
+    if(!res.ok||!res.body) throw new Error('Server error');
+    const reader=res.body.getReader();
+    const decoder=new TextDecoder();
+    let buf='', finalResult=null;
+    while(true){
+      const {done,value}=await reader.read();
+      if(done) break;
+      buf+=decoder.decode(value,{stream:true});
+      const lines=buf.split('\n');
+      buf=lines.pop()??'';
+      for(const line of lines){
+        if(line.startsWith('data: ')){
+          try{
+            const d=JSON.parse(line.slice(6));
+            if(d.step) updateStep(d.step,d.status,d.message);
+            else if(d.profile) finalResult=d;
+          }catch{}
         }
       }
-
-      if (finalResult) {
-        renderResults(finalResult);
-      } else {
-        throw new Error('No result received from server');
-      }
-
-    } catch (err) {
-      console.error(err);
-      // Fallback to regular POST if SSE fails
-      try {
-        const r2 = await fetch(`${API_BASE}/api/find-schemes`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userInput: input }),
-        });
-        const data = await r2.json();
-        if (data.error) throw new Error(data.error);
-        // Update all steps to done
-        Object.keys(STEP_MAP).forEach(k => updateStep(k, 'done', 'Complete'));
-        renderResults(data);
-      } catch (err2) {
-        renderError(err2.message || 'Unknown error');
-      }
-    } finally {
-      btn.disabled = false;
-      document.getElementById('btnIcon').textContent = '🔍';
-      document.getElementById('btnText').textContent = 'Find My Schemes';
     }
+    if(finalResult) renderResults(finalResult,'quickResults');
+    else throw new Error('No result received');
+  } catch(err){
+    try{
+      const r2=await fetch(`${API}/api/find-schemes`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userInput:input})});
+      const d=await r2.json();
+      if(d.error) throw new Error(d.error);
+      Object.values(STEP_MAP).forEach(k=>updateStep(k,'done','Complete'));
+      renderResults(d,'quickResults');
+    }catch(e2){renderError(e2.message,'quickResults');}
+  } finally {
+    btn.disabled=false;
+    document.getElementById('btnIcon').textContent='🔍';
+    document.getElementById('btnText').textContent='Find My Schemes';
+  }
+}
+
+// ── RENDER RESULTS ─────────────────────────────────────────────────────────────
+function renderResults(data, targetId) {
+  const {profile, guide, fraud} = data;
+  const section = document.getElementById(targetId);
+  section.classList.add('visible');
+
+  if(!guide.rankedSchemes||!guide.rankedSchemes.length){
+    section.innerHTML=`<div class="card" style="text-align:center;padding:48px"><div style="font-size:56px;margin-bottom:14px">🤷</div><div style="font-size:18px;font-weight:700">No schemes found</div><div style="color:var(--muted);margin-top:6px">${guide.topPriorityMessage}</div></div>`;
+    return;
   }
 
-  // ── Render Results ─────────────────────────────────────────────────────────
-  function renderResults(data) {
-    const { profile, guide, fraud } = data;
-    const section = document.getElementById('resultsSection');
-    section.classList.add('visible');
+  const tags=[
+    profile.occupation&&`💼 ${cap(profile.occupation)}`,
+    profile.state!=='unknown'&&`📍 ${cap(profile.state)}`,
+    profile.annualIncome>0&&`💰 ₹${(profile.annualIncome/100000).toFixed(1)}L/yr`,
+    profile.age>0&&`🎂 Age ${profile.age}`,
+    profile.gender!=='unknown'&&`👤 ${cap(profile.gender)}`,
+    profile.hasBplCard&&`📄 BPL`,
+    profile.hasLand&&`🌾 Land Owner`,
+  ].filter(Boolean);
 
-    if (!guide.rankedSchemes || guide.rankedSchemes.length === 0) {
-      section.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">🤷</div>
-          <div class="empty-title">No Schemes Found</div>
-          <div class="empty-text">${guide.topPriorityMessage}</div>
-        </div>`;
-      return;
-    }
+  section.innerHTML=`
+    <div class="results-header">
+      <div><div class="results-title">Your Eligible Schemes</div><div class="results-subtitle">${profile.summary||''}</div></div>
+      <div class="scheme-count">${guide.rankedSchemes.length} Schemes Found</div>
+    </div>
+    <div class="profile-card"><div class="profile-tags">${tags.map(t=>`<span class="profile-tag">${t}</span>`).join('')}</div></div>
+    <div class="priority-banner"><div style="font-size:26px;flex-shrink:0">🌟</div><div style="font-size:13px;line-height:1.6;color:var(--ink-soft)">${guide.topPriorityMessage}</div></div>
+    <div class="schemes-grid">${guide.rankedSchemes.map((s,i)=>schemeCard(s,i,profile)).join('')}</div>
+    ${fraud.isSuspicious?`<div style="background:var(--red-lt);border:2px solid #EF9A9A;border-radius:var(--radius-sm);padding:16px 20px;margin-top:20px;display:flex;gap:12px"><div style="font-size:24px">⚠️</div><div><div style="font-weight:700;color:var(--red);margin-bottom:4px">Fraud Warning</div><div style="font-size:13px;color:#B71C1C">${fraud.warningMessage||''}</div></div></div>`:''}
+    <div class="safety-card"><h3>🛡️ Stay Safe</h3><div class="safety-tips-grid">${(fraud.tips||['All govt schemes are FREE to apply','Only use official .gov.in websites','Never share OTP or UPI PIN','Aadhaar registration is always free']).slice(0,4).map(t=>`<div class="safety-tip-item">✓ ${t}</div>`).join('')}</div></div>
+  `;
 
-    const profileTags = [
-      profile.occupation && `💼 ${cap(profile.occupation)}`,
-      profile.state !== 'unknown' && `📍 ${cap(profile.state)}`,
-      profile.annualIncome > 0 && `💰 ₹${(profile.annualIncome/100000).toFixed(1)}L/yr`,
-      profile.age > 0 && `🎂 Age ${profile.age}`,
-      profile.gender !== 'unknown' && `👤 ${cap(profile.gender)}`,
-      profile.hasBplCard && `📄 BPL Card`,
-      profile.hasLand && `🌾 Land Owner`,
-      profile.category !== 'unknown' && profile.category !== 'general' && `🏷️ ${profile.category.toUpperCase()}`,
-    ].filter(Boolean);
+  // Store profile for apply agent
+  window._lastProfile = profile;
+}
 
-    const schemeCards = guide.rankedSchemes.map((s, i) => renderSchemeCard(s, i)).join('');
+function schemeCard(s, i, profile) {
+  const rank=i+1;
+  const rc=rank===1?'rank-1':rank===2?'rank-2':rank===3?'rank-3':'rank-n';
+  const cats=(s.category||[]).slice(0,2).map(c=>`<span class="badge badge-category">${c}</span>`).join('');
+  const docs=(s.requiredDocuments||[]).map(d=>`<li>${d}</li>`).join('');
+  const steps=(s.applicationSteps||[]).map(st=>`<li>${st}</li>`).join('');
+  const diff=s.difficultyLevel||'medium';
+  const diffIcon=diff==='easy'?'🟢':diff==='medium'?'🟡':'🔴';
 
-    const fraudSection = fraud.isSuspicious ? `
-      <div class="fraud-warning">
-        <div class="fraud-icon">⚠️</div>
-        <div class="fraud-content">
-          <h3>Fraud Warning Detected</h3>
-          <p>${fraud.warningMessage || ''}</p>
-          <ul class="safety-tips">
-            ${(fraud.tips || []).map(t => `<li>${t}</li>`).join('')}
-          </ul>
-        </div>
-      </div>` : '';
-
-    const safetyTips = (fraud.tips || [
-      'All government schemes are FREE to apply — never pay agents',
-      'Only use official .gov.in websites',
-      'Never share OTP or UPI PIN for "verification"',
-      'Aadhaar is free — no registration charges',
-    ]).slice(0, 4);
-
-    section.innerHTML = `
-      <div class="results-header">
-        <div>
-          <div class="results-title">Your Eligible Schemes</div>
-          <div class="results-subtitle">${profile.summary}</div>
-        </div>
-        <div class="scheme-count">${guide.rankedSchemes.length} Schemes Found</div>
-      </div>
-
-      <div class="profile-card">
-        <div class="profile-row">
-          ${profileTags.map(t => `<span class="profile-tag">${t}</span>`).join('')}
-        </div>
-      </div>
-
-      <div class="priority-banner">
-        <div class="priority-icon">🌟</div>
-        <div class="priority-text">${guide.topPriorityMessage}</div>
-      </div>
-
-      <div class="schemes-grid">${schemeCards}</div>
-
-      ${fraudSection}
-
-      <div class="safety-card">
-        <h3>🛡️ Stay Safe — Important Tips</h3>
-        <div class="safety-tips-grid">
-          ${safetyTips.map(t => `<div class="safety-tip-item">✓ ${t}</div>`).join('')}
+  return `<div class="scheme-card">
+    <div class="scheme-card-header">
+      <div class="rank-badge ${rc}">#${rank}</div>
+      <div style="flex:1">
+        <div class="scheme-name">${s.name}</div>
+        <div class="scheme-meta">
+          <span class="badge ${s.type==='central'?'badge-central':'badge-state'}">${s.type==='central'?'🇮🇳 Central':'🏛️ State'}</span>
+          ${cats}
         </div>
       </div>
-    `;
+      ${s.benefitAmount?`<div class="amount-value">${s.benefitAmount}</div>`:''}
+    </div>
+    <div class="scheme-card-body">
+      <div class="impact-text">💡 ${s.impactSummary||s.benefits}</div>
+      <details>
+        <summary>📄 Required Documents (${(s.requiredDocuments||[]).length})</summary>
+        <ul class="docs-list">${docs}</ul>
+      </details>
+      <details>
+        <summary>📋 How to Apply (${(s.applicationSteps||[]).length} steps)</summary>
+        <ul class="steps-list">${steps}</ul>
+      </details>
+      <div class="quick-tip">⚡ <strong>Quick Tip:</strong>&nbsp;${s.quickTip||'Start by gathering required documents.'}</div>
+    </div>
+    <div class="scheme-card-footer">
+      <button class="apply-btn assisted" onclick="startAssistedApply(${JSON.stringify(s).replace(/"/g,'&quot;')})">🤖 Assisted Apply</button>
+      <a href="${s.applicationUrl}" target="_blank" rel="noopener" class="apply-btn">Apply Myself ↗</a>
+      <a href="${s.officialUrl}" target="_blank" rel="noopener" class="official-link">🔗 Official</a>
+      <span class="time-badge">⏱ ${s.estimatedTime||'Varies'}</span>
+      <span class="diff-${diff}" style="margin-left:auto;font-size:12px">${diffIcon} ${cap(diff)}</span>
+    </div>
+  </div>`;
+}
+
+// ── APPLY MODAL ────────────────────────────────────────────────────────────────
+async function startAssistedApply(scheme) {
+  const profile = window._lastProfile || chatProfile;
+  if(!profile){alert('Profile not found. Please complete the scheme search first.');return;}
+
+  currentApplyScheme = scheme;
+  document.getElementById('modalTitle').textContent = `Apply: ${scheme.name}`;
+  document.getElementById('modalSubtitle').textContent = 'AI-assisted application with human login step';
+  document.getElementById('applyModal').style.display = 'flex';
+  showModalLoading('Preparing your application...');
+
+  try {
+    const res = await fetch(`${API}/api/apply/start`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scheme,profile})});
+    const data = await res.json();
+    currentApplySession = data;
+    showModalStep1(data);
+  } catch(e) {
+    showModalError('Failed to prepare application: '+e.message);
   }
+}
 
-  function renderSchemeCard(s, i) {
-    const rank = i + 1;
-    const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-n';
-    const typeBadge = s.type === 'central' ? 'badge-central' : 'badge-state';
-    const typeLabel = s.type === 'central' ? '🇮🇳 Central' : '🏛️ State';
-    const diffClass = `diff-${s.difficultyLevel}`;
-    const diffIcon = s.difficultyLevel === 'easy' ? '🟢' : s.difficultyLevel === 'medium' ? '🟡' : '🔴';
+function showModalLoading(msg) {
+  document.getElementById('modalBody').innerHTML=`<div style="text-align:center;padding:40px"><div style="font-size:32px;animation:spin 1s linear infinite;display:inline-block">⟳</div><div style="margin-top:12px;color:var(--muted)">${msg}</div></div>`;
+  document.getElementById('modalFooter').innerHTML='';
+}
 
-    const categories = (s.category || []).slice(0, 2).map(c =>
-      `<span class="badge badge-category">${c}</span>`
-    ).join('');
+function showModalStep1(data) {
+  // Separate pre-filled vs user-needs-to-fill
+  const entries = Object.entries(data.prefilledData||{});
+  const tableRows = entries.map(([k,v])=>{
+    const needsUser = v.includes('please fill')||v.includes('please select')||v.includes('—');
+    return `<tr><td>${k}</td><td class="${needsUser?'needs-input':'prefilled'}">${v}</td></tr>`;
+  }).join('');
 
-    const docs = (s.requiredDocuments || []).map(d => `<li>${d}</li>`).join('');
-    const steps = (s.applicationSteps || []).map(st => `<li>${st}</li>`).join('');
+  const docItems = (data.documents||[]).map(d=>`
+    <div class="doc-item">
+      <input type="checkbox" class="doc-check" id="doc_${d.name.replace(/\s/g,'_')}"/>
+      <label for="doc_${d.name.replace(/\s/g,'_')}" style="font-size:13px;cursor:pointer">${d.name}${d.note?` <span style="color:var(--muted);font-size:11px">(${d.note})</span>`:''}</label>
+    </div>`).join('');
 
-    return `
-    <div class="scheme-card">
-      <div class="scheme-card-header">
-        <div class="rank-badge ${rankClass}">#${rank}</div>
-        <div class="scheme-header-info">
-          <div class="scheme-name">${s.name}</div>
-          <div class="scheme-meta">
-            <span class="badge ${typeBadge}">${typeLabel}</span>
-            ${categories}
-          </div>
-        </div>
-        ${s.benefitAmount ? `
-        <div class="benefit-amount">
-          <div class="amount-label">Benefit</div>
-          <div class="amount-value">${s.benefitAmount}</div>
-        </div>` : ''}
-      </div>
-      <div class="scheme-card-body">
-        <div class="impact-text">💡 ${s.impactSummary}</div>
+  document.getElementById('modalBody').innerHTML=`
+    <div class="apply-step">
+      <div class="apply-step-num done">✓</div>
+      <div class="apply-step-content"><h4>Step 1 — Pre-filled by AI</h4><p>The agent has prepared your form data from your profile.</p></div>
+    </div>
+    ${tableRows.length?`<table class="prefill-table"><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>${tableRows}</tbody></table><p style="font-size:11px;color:var(--muted);margin-top:6px">🟢 Green = pre-filled &nbsp; 🔴 Red italic = you need to fill on the portal</p>`:''}
 
-        <details>
-          <summary>📄 Required Documents (${(s.requiredDocuments || []).length})</summary>
-          <div class="section-heading" style="margin-top:12px">Collect these before applying</div>
-          <ul class="docs-list">${docs}</ul>
-        </details>
+    <div class="apply-step" style="margin-top:20px">
+      <div class="apply-step-num done">✓</div>
+      <div class="apply-step-content"><h4>Step 2 — Documents Checklist</h4><p>Tick off documents you have ready:</p></div>
+    </div>
+    <div>${docItems}</div>
 
-        <details>
-          <summary>📋 How to Apply (${(s.applicationSteps || []).length} steps)</summary>
-          <ul class="steps-list" style="margin-top:12px">${steps}</ul>
-        </details>
+    <div class="apply-step" style="margin-top:20px">
+      <div class="apply-step-num active">3</div>
+      <div class="apply-step-content"><h4>Step 3 — Login to the Portal</h4><p>Open the official portal and log in. The agent will guide you through the form after you log in.</p></div>
+    </div>
+    <div class="login-box">
+      <h4>🔐 Login Instructions</h4>
+      <p>${data.loginInstructions||'Please log in to the official portal.'}</p>
+      <button class="open-portal-btn" onclick="window.open('${data.loginUrl}','_blank')">🌐 Open Portal ↗</button>
+    </div>
+  `;
 
-        <div class="quick-tip">
-          ⚡ <strong>Quick Tip:</strong>&nbsp; ${s.quickTip}
-        </div>
-      </div>
-      <div class="scheme-card-footer">
-        <a href="${s.applicationUrl}" target="_blank" rel="noopener" class="apply-btn">
-          Apply Now ↗
-        </a>
-        <a href="${s.officialUrl}" target="_blank" rel="noopener" class="official-link">
-          🔗 Official Site
-        </a>
-        <span class="time-badge">⏱ ${s.estimatedTime || 'Varies'}</span>
-        <span class="difficulty ${diffClass}" style="margin-left:auto">
-          ${diffIcon} ${cap(s.difficultyLevel || 'medium')}
-        </span>
-      </div>
-    </div>`;
+  document.getElementById('modalFooter').innerHTML=`
+    <button onclick="closeModal()" style="background:none;border:1px solid #E0E0EE;padding:9px 18px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif">Cancel</button>
+    <button class="apply-btn" onclick="signalLoggedIn()">✅ I Have Logged In →</button>
+  `;
+}
+
+async function signalLoggedIn() {
+  if(!currentApplySession?.sessionId) return;
+  showModalLoading('Agent is resuming... preparing post-login steps');
+
+  try {
+    const res = await fetch(`${API}/api/apply/${currentApplySession.sessionId}/resume`,{method:'POST',headers:{'Content-Type':'application/json'}});
+    const data = await res.json();
+    showModalStep2(data);
+  } catch(e) {
+    showModalError('Error resuming: '+e.message);
   }
+}
 
-  function renderError(msg) {
-    const section = document.getElementById('resultsSection');
-    section.classList.add('visible');
-    section.innerHTML = `
-      <div class="error-card">
-        <h3>⚠️ Something went wrong</h3>
-        <p>${msg}</p>
-        <p style="margin-top:8px;font-size:13px;opacity:0.7">
-          Make sure your backend server is running at ${API_BASE} with a valid API key in .env
-        </p>
-      </div>`;
-  }
+function showModalStep2(data) {
+  const steps = (data.steps||[]).map((s,i)=>`<div style="display:flex;gap:10px;margin-bottom:10px;font-size:13px"><div style="background:var(--saffron);color:white;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">${i+1}</div><div>${s}</div></div>`).join('');
 
-  // ── Utilities ──────────────────────────────────────────────────────────────
-  function cap(s) {
-    if (!s) return '';
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  }
+  document.getElementById('modalBody').innerHTML=`
+    <div style="background:var(--green-lt);border:2px solid var(--green);border-radius:var(--radius-sm);padding:14px;margin-bottom:18px;display:flex;gap:10px;align-items:center">
+      <span style="font-size:22px">✅</span>
+      <div style="font-size:13px;color:var(--green);font-weight:600">Great! You are logged in. Follow these steps:</div>
+    </div>
 
-  function toggleLanguage() {
-    isHindi = !isHindi;
-    const btn = document.getElementById('langBtn');
-    if (isHindi) {
-      btn.textContent = 'English';
-      document.getElementById('inputLabel').textContent = 'अपने बारे में बताएं';
-      document.getElementById('userInput').placeholder = 'उदाहरण: मैं हिमाचल प्रदेश का किसान हूँ। मेरी 2 एकड़ जमीन है और सालाना आय 1.5 लाख है। BPL कार्ड है।';
-      document.getElementById('btnText').textContent = 'योजनाएं खोजें';
-    } else {
-      btn.textContent = 'हिंदी';
-      document.getElementById('inputLabel').textContent = 'Tell us about yourself';
-      document.getElementById('userInput').placeholder = 'Example: I am a 35-year-old farmer from Himachal Pradesh...';
-      document.getElementById('btnText').textContent = 'Find My Schemes';
-    }
-  }
+    ${data.currentPage?`<div style="background:#FFF8E1;border:1px solid #FFE082;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:16px">📍 <strong>You should be on:</strong> ${data.currentPage}</div>`:''}
+    ${data.warning?`<div style="background:var(--red-lt);border:1px solid #EF9A9A;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:16px;color:var(--red)">⚠️ ${data.warning}</div>`:''}
 
-  // ── Voice Input ────────────────────────────────────────────────────────────
-  function toggleMic() {
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      alert('Voice input not supported in this browser. Please use Chrome.');
-      return;
-    }
-    if (isRecording) {
-      recognition?.stop();
-      return;
-    }
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SR();
-    recognition.lang = isHindi ? 'hi-IN' : 'en-IN';
-    recognition.interimResults = false;
-    recognition.onstart = () => {
-      isRecording = true;
-      document.getElementById('micBtn').classList.add('recording');
-      document.getElementById('micBtn').textContent = '⏹';
-    };
-    recognition.onresult = (e) => {
-      const transcript = e.results[0][0].transcript;
-      document.getElementById('userInput').value += (document.getElementById('userInput').value ? ' ' : '') + transcript;
-    };
-    recognition.onend = () => {
-      isRecording = false;
-      document.getElementById('micBtn').classList.remove('recording');
-      document.getElementById('micBtn').textContent = '🎤';
-    };
-    recognition.start();
-  }
+    <div>${steps}</div>
 
-  // Allow Enter key (Ctrl+Enter) to submit
-  document.getElementById('userInput').addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') findSchemes();
-  });
+    <div style="margin-top:20px">
+      <label style="font-size:13px;font-weight:600;color:var(--ink)">After submitting, enter your Application/Reference number (optional):</label>
+      <input class="confirm-input" id="confirmationInput" placeholder="e.g. PM-KISAN-2024-XXXXX"/>
+    </div>
+    ${data.estimatedMinutes?`<div style="font-size:12px;color:var(--muted);margin-top:8px">⏱ Estimated time remaining: ~${data.estimatedMinutes} minutes</div>`:''}
+  `;
+
+  document.getElementById('modalFooter').innerHTML=`
+    <button onclick="reportFailed()" style="background:none;border:1px solid var(--red);color:var(--red);padding:9px 18px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif">❌ Had an Issue</button>
+    <button class="apply-btn" onclick="confirmSubmit()">✅ I Have Submitted</button>
+  `;
+}
+
+async function confirmSubmit() {
+  const num = document.getElementById('confirmationInput')?.value?.trim();
+  const res = await fetch(`${API}/api/apply/${currentApplySession.sessionId}/confirm`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirmationNumber:num})});
+  const data = await res.json();
+  showModalSuccess(num);
+}
+
+function showModalSuccess(confirmNum) {
+  document.getElementById('modalBody').innerHTML=`
+    <div class="success-box">
+      <div style="font-size:48px;margin-bottom:12px">🎉</div>
+      <h3>Application Submitted!</h3>
+      <p>Congratulations! Your application has been submitted successfully.</p>
+      ${confirmNum?`<p style="margin-top:10px;font-weight:600">Reference Number: ${confirmNum}</p>`:''}
+      <p style="margin-top:10px">Keep this number safe. You can use it to track your application status on the official portal.</p>
+    </div>
+  `;
+  document.getElementById('modalFooter').innerHTML=`<button class="apply-btn" onclick="closeModal()">Done ✓</button>`;
+}
+
+async function reportFailed() {
+  await fetch(`${API}/api/apply/${currentApplySession.sessionId}/fail`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reason:'User reported issue'})});
+  showModalError('No worries! You can try again or visit the portal directly. The "Apply Myself" button will take you there.');
+}
+
+function showModalError(msg) {
+  document.getElementById('modalBody').innerHTML=`<div class="error-card"><h3>Something went wrong</h3><p>${msg}</p></div>`;
+  document.getElementById('modalFooter').innerHTML=`<button class="apply-btn" onclick="closeModal()">Close</button>`;
+}
+
+function closeModal() {
+  document.getElementById('applyModal').style.display='none';
+  currentApplySession=null;
+}
+document.getElementById('applyModal').addEventListener('click',e=>{if(e.target===document.getElementById('applyModal'))closeModal();});
+
+// ── VOICE ──────────────────────────────────────────────────────────────────────
+function toggleMic() {
+  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){alert('Voice not supported. Use Chrome.');return;}
+  if(isRecording){recognition?.stop();return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recognition=new SR();
+  recognition.lang='en-IN';
+  recognition.onstart=()=>{isRecording=true;document.getElementById('micBtn').classList.add('recording');document.getElementById('micBtn').textContent='⏹';};
+  recognition.onresult=(e)=>{document.getElementById('userInput').value+=(document.getElementById('userInput').value?' ':'')+e.results[0][0].transcript;};
+  recognition.onend=()=>{isRecording=false;document.getElementById('micBtn').classList.remove('recording');document.getElementById('micBtn').textContent='🎤';};
+  recognition.start();
+}
+
+// ── UTILS ──────────────────────────────────────────────────────────────────────
+function cap(s){if(!s)return'';return s.charAt(0).toUpperCase()+s.slice(1);}
+function now(){return new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});}
+
+// Init chat on load
+window.addEventListener('DOMContentLoaded', () => { initChat(); });
+document.getElementById('userInput')?.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')findSchemes();});
 </script>
 </body>
 </html>
