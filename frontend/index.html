@@ -38,9 +38,6 @@
 
     /* MAIN */
     .main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
-    .mode-panel{display:none}
-    .mode-panel.active{display:block;animation:fadeIn .3s ease}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
     /* CARDS */
     .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(0,0,128,.07);padding:28px;margin-bottom:24px}
@@ -101,6 +98,7 @@
     /* RESULTS */
     .results-section{display:none}
     .results-section.visible{display:block;animation:fadeIn .4s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
     .results-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
     .results-title{font-size:20px;font-weight:700}
     .results-subtitle{font-size:13px;color:var(--muted);margin-top:3px}
@@ -214,6 +212,17 @@
       .amount-value{display:none}
       .modal{border-radius:var(--radius) var(--radius) 0 0;margin-top:auto}
     }
+    /* Chat agent progress */
+.chat-progress{background:var(--card);border-radius:var(--radius-sm);border:1px solid rgba(0,0,128,.07);padding:16px 20px;margin:12px 0;box-shadow:var(--shadow)}
+.chat-progress-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.chat-agent-step{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #F0F0F6}
+.chat-agent-step:last-child{border-bottom:none}
+.chat-step-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;transition:all .3s}
+.chat-step-icon.idle{background:#F0F0F6}
+.chat-step-icon.running{background:var(--saffron-lt);animation:spin 1.5s linear infinite}
+.chat-step-icon.done{background:var(--green-lt)}
+.chat-step-name{font-size:12px;font-weight:600;color:var(--ink)}
+.chat-step-msg{font-size:11px;color:var(--muted);margin-top:1px}
   </style>
 </head>
 <body>
@@ -227,15 +236,15 @@
     <p class="header-sub">AI Government Scheme Navigator — Find &amp; Apply for benefits you deserve</p>
   </div>
   <div class="mode-tabs">
-    <button class="mode-tab active" onclick="switchMode('chat')">💬 Chat Mode</button>
-    <button class="mode-tab" onclick="switchMode('quick')">⚡ Quick Search</button>
+    <button class="mode-tab" id="tab-chat" onclick="switchMode('chat')">💬 Chat Mode</button>
+    <button class="mode-tab" id="tab-quick" onclick="switchMode('quick')">⚡ Quick Search</button>
   </div>
 </header>
 
 <main class="main">
 
   <!-- ── CHAT MODE ─────────────────────────────────────────────────── -->
-  <div class="mode-panel active" id="panel-chat">
+  <div id="panel-chat" style="display:none">
     <div class="card">
       <div id="chatWindow" class="chat-window"></div>
       <div class="chat-input-row">
@@ -254,7 +263,7 @@
   </div>
 
   <!-- ── QUICK SEARCH MODE ─────────────────────────────────────────── -->
-  <div class="mode-panel" id="panel-quick">
+  <div id="panel-quick" style="display:none">
     <div class="card">
       <label class="input-label">Describe yourself in one paragraph</label>
       <div class="textarea-wrap">
@@ -322,11 +331,22 @@ let currentApplyScheme = null;
 
 // ── MODE SWITCHING ─────────────────────────────────────────────────────────────
 function switchMode(mode) {
-  currentMode = mode;
-  document.querySelectorAll('.mode-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&mode==='chat')||(i===1&&mode==='quick')));
-  document.getElementById('panel-chat').classList.toggle('active', mode==='chat');
-  document.getElementById('panel-quick').classList.toggle('active', mode==='quick');
-  if (mode==='chat' && !conversationId) initChat();
+  console.log('switchMode called with:', mode);
+
+  document.getElementById('tab-chat').classList.toggle('active', mode === 'chat');
+  document.getElementById('tab-quick').classList.toggle('active', mode === 'quick');
+
+  const chatPanel = document.getElementById('panel-chat');
+  const quickPanel = document.getElementById('panel-quick');
+
+  console.log('panels found:', chatPanel, quickPanel);
+
+  chatPanel.style.display  = mode === 'chat'  ? 'block' : 'none';
+  quickPanel.style.display = mode === 'quick' ? 'block' : 'none';
+
+  console.log('after switch - chat:', chatPanel.style.display, 'quick:', quickPanel.style.display);
+
+  if (mode === 'chat' && !conversationId) initChat();
 }
 
 // ── CHAT MODE ──────────────────────────────────────────────────────────────────
@@ -383,18 +403,49 @@ async function sendChatMessage() {
 
   try {
     const res = await fetch(`${API}/api/conversation/${conversationId}/message`, {
-      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg})
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: msg })
     });
     const data = await res.json();
     hideTyping();
-    appendAgentBubble(data.reply);
 
     if (data.isComplete && data.result) {
-      chatProfile = data.result.profile;
+      // Profile collection done — show agent progress inside chat
+      appendAgentBubble(data.reply);
       document.getElementById('chatSuggestions').style.display = 'none';
-      setTimeout(() => renderResults(data.result, 'chatResults'), 400);
+
+      // Show the 4-agent progress box in the chat window
+      showChatProgress();
+
+      // Animate through the steps — the server already ran them,
+      // so we just replay the visual in sequence with short delays
+      updateChatStep('profile', 'running', 'Normalizing your profile...');
+      await delay(600);
+      updateChatStep('profile', 'done', `Detected: ${data.result.profile.occupation} from ${data.result.profile.state}`);
+
+      updateChatStep('discovery', 'running', 'Searching eligible schemes...');
+      await delay(700);
+      updateChatStep('discovery', 'done', `Found ${data.result.guide.rankedSchemes.length} eligible schemes`);
+
+      updateChatStep('guide', 'running', 'Ranking and writing guide...');
+      await delay(600);
+      updateChatStep('guide', 'done', `Ranked ${data.result.guide.rankedSchemes.length} schemes by impact`);
+
+      updateChatStep('fraud', 'running', 'Checking for fraud patterns...');
+      await delay(500);
+      updateChatStep('fraud', 'done', data.result.fraud.isSuspicious ? '⚠️ Warning detected!' : 'All clear ✓');
+
+      await delay(400);
+      removeChatProgress();
+
+      chatProfile = data.result.profile;
+      setTimeout(() => renderResults(data.result, 'chatResults'), 200);
+
+    } else {
+      // Still collecting profile — just show the reply
+      appendAgentBubble(data.reply);
     }
-  } catch(e) {
+
+  } catch (e) {
     hideTyping();
     appendAgentBubble('Sorry, something went wrong. Please try again.');
   } finally {
@@ -519,7 +570,6 @@ function renderResults(data, targetId) {
     <div class="safety-card"><h3>🛡️ Stay Safe</h3><div class="safety-tips-grid">${(fraud.tips||['All govt schemes are FREE to apply','Only use official .gov.in websites','Never share OTP or UPI PIN','Aadhaar registration is always free']).slice(0,4).map(t=>`<div class="safety-tip-item">✓ ${t}</div>`).join('')}</div></div>
   `;
 
-  // Store profile for apply agent
   window._lastProfile = profile;
 }
 
@@ -566,6 +616,12 @@ function schemeCard(s, i, profile) {
   </div>`;
 }
 
+function renderError(msg, targetId) {
+  const section = document.getElementById(targetId);
+  section.style.display = 'block';
+  section.innerHTML = `<div class="error-card"><h3>Something went wrong</h3><p>${msg}</p></div>`;
+}
+
 // ── APPLY MODAL ────────────────────────────────────────────────────────────────
 async function startAssistedApply(scheme) {
   const profile = window._lastProfile || chatProfile;
@@ -593,7 +649,6 @@ function showModalLoading(msg) {
 }
 
 function showModalStep1(data) {
-  // Separate pre-filled vs user-needs-to-fill
   const entries = Object.entries(data.prefilledData||{});
   const tableRows = entries.map(([k,v])=>{
     const needsUser = v.includes('please fill')||v.includes('please select')||v.includes('—');
@@ -612,13 +667,11 @@ function showModalStep1(data) {
       <div class="apply-step-content"><h4>Step 1 — Pre-filled by AI</h4><p>The agent has prepared your form data from your profile.</p></div>
     </div>
     ${tableRows.length?`<table class="prefill-table"><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>${tableRows}</tbody></table><p style="font-size:11px;color:var(--muted);margin-top:6px">🟢 Green = pre-filled &nbsp; 🔴 Red italic = you need to fill on the portal</p>`:''}
-
     <div class="apply-step" style="margin-top:20px">
       <div class="apply-step-num done">✓</div>
       <div class="apply-step-content"><h4>Step 2 — Documents Checklist</h4><p>Tick off documents you have ready:</p></div>
     </div>
     <div>${docItems}</div>
-
     <div class="apply-step" style="margin-top:20px">
       <div class="apply-step-num active">3</div>
       <div class="apply-step-content"><h4>Step 3 — Login to the Portal</h4><p>Open the official portal and log in. The agent will guide you through the form after you log in.</p></div>
@@ -639,7 +692,6 @@ function showModalStep1(data) {
 async function signalLoggedIn() {
   if(!currentApplySession?.sessionId) return;
   showModalLoading('Agent is resuming... preparing post-login steps');
-
   try {
     const res = await fetch(`${API}/api/apply/${currentApplySession.sessionId}/resume`,{method:'POST',headers:{'Content-Type':'application/json'}});
     const data = await res.json();
@@ -657,12 +709,9 @@ function showModalStep2(data) {
       <span style="font-size:22px">✅</span>
       <div style="font-size:13px;color:var(--green);font-weight:600">Great! You are logged in. Follow these steps:</div>
     </div>
-
     ${data.currentPage?`<div style="background:#FFF8E1;border:1px solid #FFE082;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:16px">📍 <strong>You should be on:</strong> ${data.currentPage}</div>`:''}
     ${data.warning?`<div style="background:var(--red-lt);border:1px solid #EF9A9A;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:16px;color:var(--red)">⚠️ ${data.warning}</div>`:''}
-
     <div>${steps}</div>
-
     <div style="margin-top:20px">
       <label style="font-size:13px;font-weight:600;color:var(--ink)">After submitting, enter your Application/Reference number (optional):</label>
       <input class="confirm-input" id="confirmationInput" placeholder="e.g. PM-KISAN-2024-XXXXX"/>
@@ -678,8 +727,7 @@ function showModalStep2(data) {
 
 async function confirmSubmit() {
   const num = document.getElementById('confirmationInput')?.value?.trim();
-  const res = await fetch(`${API}/api/apply/${currentApplySession.sessionId}/confirm`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirmationNumber:num})});
-  const data = await res.json();
+  await fetch(`${API}/api/apply/${currentApplySession.sessionId}/confirm`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirmationNumber:num})});
   showModalSuccess(num);
 }
 
@@ -710,7 +758,9 @@ function closeModal() {
   document.getElementById('applyModal').style.display='none';
   currentApplySession=null;
 }
-document.getElementById('applyModal').addEventListener('click',e=>{if(e.target===document.getElementById('applyModal'))closeModal();});
+document.getElementById('applyModal').addEventListener('click',e=>{
+  if(e.target===document.getElementById('applyModal')) closeModal();
+});
 
 // ── VOICE ──────────────────────────────────────────────────────────────────────
 function toggleMic() {
@@ -725,13 +775,75 @@ function toggleMic() {
   recognition.start();
 }
 
+function showChatProgress() {
+  // Remove any existing progress box
+  document.getElementById('chatProgressBox')?.remove();
+
+  const win = document.getElementById('chatWindow');
+  const box = document.createElement('div');
+  box.id = 'chatProgressBox';
+  box.className = 'chat-progress';
+  box.innerHTML = `
+    <div class="chat-progress-title">🤖 AI Agents Working</div>
+    <div class="chat-agent-step">
+      <div class="chat-step-icon idle" id="cp-icon-profile">👤</div>
+      <div>
+        <div class="chat-step-name">Profile Normalizer</div>
+        <div class="chat-step-msg" id="cp-msg-profile">Waiting...</div>
+      </div>
+    </div>
+    <div class="chat-agent-step">
+      <div class="chat-step-icon idle" id="cp-icon-discovery">🔍</div>
+      <div>
+        <div class="chat-step-name">Scheme Discovery & Eligibility Agent</div>
+        <div class="chat-step-msg" id="cp-msg-discovery">Waiting...</div>
+      </div>
+    </div>
+    <div class="chat-agent-step">
+      <div class="chat-step-icon idle" id="cp-icon-guide">📋</div>
+      <div>
+        <div class="chat-step-name">Benefit Ranking & Application Guide Agent</div>
+        <div class="chat-step-msg" id="cp-msg-guide">Waiting...</div>
+      </div>
+    </div>
+    <div class="chat-agent-step">
+      <div class="chat-step-icon idle" id="cp-icon-fraud">🛡️</div>
+      <div>
+        <div class="chat-step-name">Fraud Detection Agent</div>
+        <div class="chat-step-msg" id="cp-msg-fraud">Waiting...</div>
+      </div>
+    </div>
+  `;
+  win.appendChild(box);
+  win.scrollTop = win.scrollHeight;
+}
+
+function updateChatStep(key, status, msg) {
+  const icon = document.getElementById('cp-icon-' + key);
+  const msgEl = document.getElementById('cp-msg-' + key);
+  if (!icon || !msgEl) return;
+  icon.className = 'chat-step-icon ' + status;
+  icon.textContent = status === 'running' ? '⟳' : status === 'done' ? '✓' : icon.textContent;
+  if (msg) msgEl.textContent = msg;
+  document.getElementById('chatWindow').scrollTop = document.getElementById('chatWindow').scrollHeight;
+}
+
+function removeChatProgress() {
+  document.getElementById('chatProgressBox')?.remove();
+}
+
+
 // ── UTILS ──────────────────────────────────────────────────────────────────────
 function cap(s){if(!s)return'';return s.charAt(0).toUpperCase()+s.slice(1);}
 function now(){return new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});}
 
-// Init chat on load
-window.addEventListener('DOMContentLoaded', () => { initChat(); });
-document.getElementById('userInput')?.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')findSchemes();});
+// ── INIT ───────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  switchMode('chat');
+});
+document.getElementById('userInput')?.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='Enter') findSchemes();
+});
 </script>
 </body>
 </html>
