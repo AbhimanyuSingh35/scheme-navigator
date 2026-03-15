@@ -1,5 +1,4 @@
 // src/orchestrator.ts
-
 import { extractUserProfile } from "./agents/profileAgent.js";
 import { discoverEligibleSchemes } from "./agents/discoveryAgent.js";
 import { generateApplicationGuide } from "./agents/guideAgent.js";

@@ -1,5 +1,6 @@
 // src/server.ts
 import "dotenv/config";
+import { convertGuideToHindi } from "./services/sarvamTTS.js";
 import express from "express";
 import cors from "cors";
 import path from "path";
@@ -182,7 +183,23 @@ app.get("/api/apply/:sessionId", (req, res) => {
   if (!session) return res.status(404).json({ error: "Not found" });
   return res.json(session);
 });
-
+app.post("/api/voice", async (req, res) => {
+  try {
+    const { guide } = req.body as { guide: { topPriorityMessage: string; rankedSchemes: any[] } };
+    if (!guide?.rankedSchemes) {
+      return res.status(400).json({ error: "guide result is required" });
+    }
+    const audioBuffer = await convertGuideToHindi(guide);
+    res.set({
+      "Content-Type": "audio/wav",
+      "Content-Length": String(audioBuffer.length),
+    });
+    res.send(audioBuffer);
+  } catch (err) {
+    console.error("Sarvam TTS error:", err);
+    res.status(500).json({ error: "Voice generation failed", details: String(err) });
+  }
+});
 // ── Start ──────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`
